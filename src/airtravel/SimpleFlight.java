@@ -18,7 +18,7 @@ public final class SimpleFlight extends AbstractFlight {
         if (code == null || leg == null || flightSchedule == null){
             throw new NullPointerException("SimpleFlight build method called with one or more null parameters");
         }  else {
-
+            leg.getOrigin().addFlight(new SimpleFlight(code,leg,flightSchedule));
             return new SimpleFlight(code, leg, flightSchedule);
         }
     }
