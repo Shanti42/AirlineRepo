@@ -12,6 +12,9 @@ public final class Airport implements Comparable<Airport> {
     // the shortest length of time for a passenger to transfer planes
     private final Duration connectionTimeMin;
 
+    //New additions based on FlightGroup section of Assignment
+    private final FlightGroup outFlights = FlightGroup.of(this);
+
     private Airport (String code, Duration connectionTimeMin){
         this.code = code;
         this.connectionTimeMin = connectionTimeMin;
@@ -62,5 +65,13 @@ public final class Airport implements Comparable<Airport> {
     @Override
     public String toString() {
         return getCode();
+    }
+
+    public final boolean addFlight(Flight flight){
+        return outFlights.add(flight);
+    }
+
+    public final boolean removeFlight(Flight flight){
+        return outFlights.remove(flight);
     }
 }
