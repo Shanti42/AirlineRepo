@@ -26,13 +26,13 @@ public final class FlightSchedule {
 
     public static final FlightSchedule of(LocalTime departureTime, LocalTime arrivalTime) {
         if (departureTime == null && arrivalTime == null){
-            throw new NullPointerException("FlightSchedule departure time and arrival time parameters are null");
+            throw new NullPointerException("FlightSchedule - build() both departureTime and arrivalTime are null");
         } else if(departureTime == null) {
-            throw new NullPointerException("FlightSchedule departure time is null");
+            throw new NullPointerException("FlightSchedule - build() departure time is null");
         } else if (arrivalTime == null){
-            throw new NullPointerException("FlightSchedule arrival time is null");
+            throw new NullPointerException("FlightSchedule - build() arrivalTime is null");
         } else if (departureTime.isBefore(arrivalTime)) { //All airplanes fly during the day so no LocalTime needs to be wrapped after midnight
-            throw new IllegalArgumentException("Arrival time must ");
+            throw new IllegalArgumentException("Departure time must be earlier than arrival time");
         } else {
             return new FlightSchedule(departureTime, arrivalTime);
         }
@@ -40,12 +40,10 @@ public final class FlightSchedule {
 
     public final boolean isShort(Duration durationMax) {
         if(durationMax == null)
-            throw new NullPointerException("FlightSchedule - isShort() method received null parameter");
+            throw new NullPointerException("FlightSchedule - isShort() durationMax is null");
 
         Duration travelTime = Duration.between(departureTime, arrivalTime);
-        if( travelTime.compareTo(durationMax) <= 0  )
-            return true;
-        return false;
+        return travelTime.compareTo(durationMax) <= 0;
     }
 }
 
