@@ -39,6 +39,9 @@ public final class FlightSchedule {
     }
 
     public final boolean isShort(Duration durationMax) {
+        if(durationMax == null)
+            throw new NullPointerException("FlightSchedule - isShort() method received null parameter");
+
         Duration travelTime = Duration.between(departureTime, arrivalTime);
         if( travelTime.compareTo(durationMax) <= 0  )
             return true;
