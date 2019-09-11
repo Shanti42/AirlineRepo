@@ -17,7 +17,7 @@ class AirTravelTest {
         final String
 
         Object notAirport = new Object();
-        Airport a1 = 
+        Airport a1 =
     }
 
 
