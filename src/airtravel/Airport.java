@@ -42,14 +42,11 @@ public final class Airport implements Comparable<Airport> {
 
     @Override
     public boolean equals(Object object) {
-        boolean equals = false;
         if(object != null && object instanceof Airport) {
-            Airport otheraAirport = (Airport) object;
-            equals = getCode().equals(otheraAirport.code);
+            Airport otherAirport = (Airport) object;
+            return getCode().equals(otherAirport.code);
         }
-        //else: equals is false, but value already assigned
-
-        return equals;
+        return false;
     }
 
     @Override
