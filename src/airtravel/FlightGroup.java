@@ -21,7 +21,7 @@ public final class FlightGroup {
 
     public static final FlightGroup of(Airport origin) {
         if (origin == null){
-            throw new NullPointerException("FlightGroup origin Airport is null");
+            throw new NullPointerException("FlightGroup - build() origin is null");
         } else {
             return new FlightGroup(origin);
         }
@@ -33,9 +33,9 @@ public final class FlightGroup {
 
     public final boolean add(Flight flight){
         if(flight == null)
-            throw new NullPointerException("FlightGroup - add() method received a null Flight");
+            throw new NullPointerException("FlightGroup - add() flight is null");
         else if(!origin.getCode().equals(flight.getCode()))
-            throw new IllegalArgumentException("Flight must originate must the same airport to be add");
+            throw new IllegalArgumentException("Flights must originate from the same airport to be added");
 
         Set<Flight> tempFlights = flights.get(flight.departureTime());
         if(!tempFlights.contains(flight)) {
@@ -48,9 +48,9 @@ public final class FlightGroup {
 
     public final boolean remove(Flight flight){
         if(flight == null)
-            throw new NullPointerException("FlightGroup - remove() method received a null flight");
+            throw new NullPointerException("FlightGroup - remove() flight is null");
         if(!origin.getCode().equals(flight.getCode()))
-            throw new IllegalArgumentException("Flight must originate must the same airport to be add");
+            throw new IllegalArgumentException("Flights must originate from the same airport to be removed");
 
         Set<Flight> tempFlights = flights.get(flight.departureTime());
         if(tempFlights.contains(flight)) {
@@ -63,7 +63,7 @@ public final class FlightGroup {
 
     public final Set<Flight> flightsAtOrAfter(LocalTime departureTime) {
         if(departureTime == null)
-            throw new NullPointerException("FlightGroup - flightsAtOrAfter() received a null LocalTime");
+            throw new NullPointerException("FlightGroup - flightsAtOrAfter() departureTime is null");
 
         Set<Flight> tempFlights = new HashSet<Flight>();
         Set<LocalTime> departTimes = flights.keySet();

@@ -29,7 +29,7 @@ public abstract class AbstractFlight implements Flight {
 
     public boolean isShort(Duration durationMax){
          if(durationMax == null)
-             throw new NullPointerException("Flight - isShort() method received null paramter");
+             throw new NullPointerException("Flight - isShort() durationMax is null");
          return this.getFlightSchedule().isShort(durationMax);
     }
 }
