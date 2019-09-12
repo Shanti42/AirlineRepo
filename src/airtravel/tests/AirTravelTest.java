@@ -34,13 +34,13 @@ class AirTravelTest {
     void testAirportOf() {
         //test error handling for method
         assertThrows(NullPointerException.class, () -> {
-            Airport test = Airport.of(null, hour2);
+            Airport.of(null, hour2);
         });
         assertThrows(NullPointerException.class, () -> {
-            Airport test = Airport.of(CLE.name(), null);
+            Airport.of(CLE.name(), null);
         });
         assertThrows(NullPointerException.class, () -> {
-            Airport test = Airport.of(null, null);
+            Airport.of(null, null);
         });
         assertEquals(Airport.of(CLE.name(), hour1), a1, "Test build method creates valid object");
     }
@@ -70,13 +70,13 @@ class AirTravelTest {
     @Test
     void testLegOf(){
         assertThrows(NullPointerException.class, () -> {
-            Leg test = Leg.of(null, a1);
+            Leg.of(null, a1);
         });
         assertThrows(NullPointerException.class, () -> {
-            Leg test = Leg.of(a2, null);
+            Leg.of(a2, null);
         });
         assertThrows(NullPointerException.class, () -> {
-            Leg test = Leg.of(null, null);
+            Leg.of(null, null);
         });
         Leg leg1 = Leg.of(a1, a2);
         assertTrue(leg1.getOrigin().equals(a1), "Test Origin added to Leg");
