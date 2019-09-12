@@ -4,8 +4,11 @@ import java.time.LocalTime;
 
 public final class SimpleFlight extends AbstractFlight {
 
+    //Flight identifier
     private final String code;
+    //Flight leg
     private final Leg leg;
+    //Flight Schedule
     private final FlightSchedule flightSchedule;
 
     private SimpleFlight(String code, Leg leg, FlightSchedule flightSchedule) {
