@@ -8,7 +8,10 @@ import java.time.LocalTime;
  */
 public final class FlightSchedule {
 
+    //Time the flight departs from the origin airport
     private final LocalTime departureTime;
+
+    //Time the flight arrives at the destination airport
     private final LocalTime arrivalTime;
 
     private FlightSchedule(LocalTime departureTime, LocalTime arrivalTime)  {
@@ -38,6 +41,7 @@ public final class FlightSchedule {
         }
     }
 
+    //Returns whether the flight is shorter then the given duration or not
     public final boolean isShort(Duration durationMax) {
         if(durationMax == null)
             throw new NullPointerException("FlightSchedule - isShort() durationMax is null");

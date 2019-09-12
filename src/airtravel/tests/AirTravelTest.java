@@ -1,8 +1,9 @@
 package airtravel.tests;
 
 import airtravel.Airport;
+
 import airtravel.Leg;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;

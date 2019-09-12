@@ -12,8 +12,12 @@ import java.util.TreeMap;
  */
 public final class FlightGroup {
 
+    //Represents origin airport for all flights in group
     private final Airport origin;
+
+    //Map of departure time to the collection of flights that have that departure time
     private final NavigableMap<LocalTime, Set<Flight>> flights =  new TreeMap<LocalTime, Set<Flight>>();
+
     //flights is organized by departure time (based on Discussion board)
     private FlightGroup(Airport origin) {
         this.origin = origin;
@@ -31,6 +35,7 @@ public final class FlightGroup {
         return origin;
     }
 
+    //Adds a flight to the collection mapped to its departure time
     public final boolean add(Flight flight){
         if(flight == null)
             throw new NullPointerException("FlightGroup - add() flight is null");
@@ -46,6 +51,7 @@ public final class FlightGroup {
         return false;
     }
 
+    //Removes a flight if it is mapped to the collection of flights at its departure time
     public final boolean remove(Flight flight){
         if(flight == null)
             throw new NullPointerException("FlightGroup - remove() flight is null");
@@ -61,6 +67,7 @@ public final class FlightGroup {
         return false;
     }
 
+    //Returns a set of all flights before or after the given departure time
     public final Set<Flight> flightsAtOrAfter(LocalTime departureTime) {
         if(departureTime == null)
             throw new NullPointerException("FlightGroup - flightsAtOrAfter() departureTime is null");
