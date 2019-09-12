@@ -39,11 +39,11 @@ public final class FlightGroup {
     public final boolean add(Flight flight){
         if(flight == null)
             throw new NullPointerException("FlightGroup - add() flight is null");
-        else if(!origin.getCode().equals(flight.getCode()))
+        else if(!origin.getCode().equals(flight.getLeg().getOrigin().getCode()))
             throw new IllegalArgumentException("Flights must originate from the same airport to be added");
 
         Set<Flight> tempFlights = flights.get(flight.departureTime());
-        if(!tempFlights.contains(flight)) {
+        if(tempFlights.isEmpty() || !tempFlights.contains(flight)) {
             tempFlights.add(flight);
             flights.put(flight.departureTime(), tempFlights);
             return true;

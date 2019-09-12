@@ -5,6 +5,7 @@ import airtravel.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.time.LocalTime;
 import java.time.Duration;
@@ -14,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests the Flight interface, and the AbstractFlight and SimpleFlight classes
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FlightTest {
 
     public String flightCode;
@@ -39,8 +41,8 @@ public class FlightTest {
         originCode = "CLE";
         destinationCode = "LGA";
 
-        depart = LocalTime.MIN;
-        arrival = LocalTime.MAX;
+        depart = LocalTime.NOON;
+        arrival = LocalTime.MIDNIGHT;
 
         originDuration = Duration.ofHours(5);
         destDuration = Duration.ofHours(12);
