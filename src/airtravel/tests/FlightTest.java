@@ -54,17 +54,46 @@ public class FlightTest {
 
         flight = SimpleFlight.of(flightCode, leg, flightSchedule);
     }
-
+    /**
+    *   SimpleFlight build method
+     */
     @Test
-    void TestOf(){
+    void SimpleFlightOf(){
 
-        Assertions.assertThrows(NullPointerException.class, SimpleFlight::of(null,null,null));
+        Assertions.assertSame(SimpleFlight.of(originCode,leg,flightSchedule),flight);
+        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,null,null);});
+        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(originCode,null,null);});
+        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,leg,null);});
+        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,null,flightSchedule);});
+        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(originCode,leg,null);});
+        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(originCode, null,flightSchedule);});
+        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,leg,flightSchedule);});
 
+    }
+    /**
+    * SimpleFlight - Test if isShort() throws exception when expected and returns a boolean otherwise
+     */
+    @Test
+    void SimpleFlightIsShort() {
+        Duration nullDuration = null;
+
+        Assertions.assertThrows(NullPointerException.class, () -> {flight.isShort(nullDuration);});
+
+        Duration duration = Duration.ofHours(10);
+        Assertions.assertNotNull(flight.isShort(duration));
     }
 
     @Test
-    void testIsShort() {
-        Duration durationMax = null;
+    void FlightGroupOf(){
+
+        FlightGroup flightGroup = FlightGroup.of(origin);
+        Assertions.assertThrows(NullPointerException.class, () -> {FlightGroup.of(null);});
+    }
+
+    @Test
+    void FlightGroupAdd(){
+
+      //  Flight
     }
 
 
