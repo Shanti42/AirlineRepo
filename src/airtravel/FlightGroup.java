@@ -43,9 +43,9 @@ public final class FlightGroup {
             throw new IllegalArgumentException("Flights must originate from the same airport to be added");
 
         Set<Flight> tempFlights = flights.get(flight.departureTime());
-        if(tempFlights == null)
+        if(tempFlights == null) {
             tempFlights = new HashSet<Flight>();
-
+        }
         if(!tempFlights.contains(flight)) {
             tempFlights.add(flight);
             flights.put(flight.departureTime(), tempFlights);
@@ -62,9 +62,7 @@ public final class FlightGroup {
             throw new IllegalArgumentException("Flights must originate from the same airport to be removed");
 
         Set<Flight> tempFlights = flights.get(flight.departureTime());
-        if(tempFlights == null)
-            return false;
-        if(tempFlights.contains(flight)) {
+        if(tempFlights != null && tempFlights.contains(flight)) {
             tempFlights.remove(flight);
             flights.put(flight.departureTime(), tempFlights);
             return true;
@@ -80,8 +78,9 @@ public final class FlightGroup {
         Set<Flight> tempFlights = new HashSet<Flight>();
         Set<LocalTime> departTimes = flights.keySet();
         for(LocalTime departure: departTimes){
-            if(departure.equals(departureTime) || departure.isBefore(departureTime))
+            if(departure.equals(departureTime) || departure.isBefore(departureTime)) {
                 tempFlights.addAll(flights.get(departure));
+            }
         }
         return tempFlights;
     }

@@ -23,12 +23,12 @@ public final class Leg {
         return destination;
     }
 
-    public static final Leg of(Airport origin, Airport destination){
-        if(origin == null && destination == null){
+    public static final Leg of(Airport origin, Airport destination) {
+        if (origin == null && destination == null) {
             throw new NullPointerException("Origin and destination are null");
-        } else if (origin == null){
+        } else if (origin == null) {
             throw new NullPointerException("Origin is null");
-        } else if (destination == null){
+        } else if (destination == null) {
             throw new NullPointerException("Destination is null");
         } else {
             return new Leg(origin, destination);

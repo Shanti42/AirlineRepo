@@ -15,17 +15,17 @@ public final class Airport implements Comparable<Airport> {
     //New additions based on FlightGroup section of Assignment
     private final FlightGroup outFlights = FlightGroup.of(this);
 
-    private Airport (String code, Duration connectionTimeMin){
+    private Airport(String code, Duration connectionTimeMin) {
         this.code = code;
         this.connectionTimeMin = connectionTimeMin;
     }
 
-    public static final Airport of(String code, Duration connectionTimeMin){
-        if (code == null && connectionTimeMin == null){
+    public static final Airport of(String code, Duration connectionTimeMin) {
+        if (code == null && connectionTimeMin == null) {
             throw new NullPointerException("Airport identifier code and connection time parameter are null");
-        } else if(code == null) {
+        } else if (code == null) {
             throw new NullPointerException("Airport identifier code is null");
-        } else if (connectionTimeMin == null){
+        } else if (connectionTimeMin == null) {
             throw new NullPointerException("Connection time parameter is null");
         } else {
             return new Airport(code, connectionTimeMin);
@@ -36,13 +36,13 @@ public final class Airport implements Comparable<Airport> {
         return code;
     }
 
-    public Duration getConnectionTimeMin(){
+    public Duration getConnectionTimeMin() {
         return connectionTimeMin;
     }
 
     @Override
     public boolean equals(Object object) {
-        if(object != null && object instanceof Airport) {
+        if (object != null && object instanceof Airport) {
             Airport otherAirport = (Airport) object;
             return getCode().equals(otherAirport.code);
         }
@@ -64,11 +64,11 @@ public final class Airport implements Comparable<Airport> {
         return getCode();
     }
 
-    public final boolean addFlight(Flight flight){
+    public final boolean addFlight(Flight flight) {
         return outFlights.add(flight);
     }
 
-    public final boolean removeFlight(Flight flight){
+    public final boolean removeFlight(Flight flight) {
         return outFlights.remove(flight);
     }
 }
