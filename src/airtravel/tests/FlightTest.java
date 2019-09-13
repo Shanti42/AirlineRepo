@@ -18,31 +18,31 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FlightTest {
 
-    public String flightCode;
-    public String originCode;
-    public String destinationCode;
+    public static String flightCode;
+    public static String originCode;
+    public static String destinationCode;
 
-    public LocalTime depart;
-    public LocalTime arrival;
+    public static LocalTime depart;
+    public static LocalTime arrival;
 
-    public Duration originDuration;
-    public Duration destDuration;
+    public static Duration originDuration;
+    public static Duration destDuration;
 
-    public Airport origin;
-    public Airport destination;
+    public static Airport origin;
+    public static Airport destination;
 
-    public Leg leg;
-    public FlightSchedule flightSchedule;
-    public Flight flight;
+    public static Leg leg;
+    public static FlightSchedule flightSchedule;
+    public static Flight flight;
 
     @BeforeAll
-    void initalilizeFlights() {
+    void initializeFlights() {
         flightCode = "A112";
         originCode = "CLE";
         destinationCode = "LGA";
 
-        depart = LocalTime.NOON;
-        arrival = LocalTime.MIDNIGHT;
+        depart = LocalTime.MIN;
+        arrival = LocalTime.NOON;
 
         originDuration = Duration.ofHours(5);
         destDuration = Duration.ofHours(12);
@@ -57,12 +57,12 @@ public class FlightTest {
         flight = SimpleFlight.of(flightCode, leg, flightSchedule);
     }
     /**
-    *   SimpleFlight build method
+     *   SimpleFlight build method
      */
     @Test
-    void SimpleFlightOf(){
+    void testSimpleFlightOf(){
 
-        Assertions.assertSame(SimpleFlight.of(originCode,leg,flightSchedule),flight);
+
         Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,null,null);});
         Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(originCode,null,null);});
         Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,leg,null);});
@@ -73,10 +73,10 @@ public class FlightTest {
 
     }
     /**
-    * SimpleFlight - Test if isShort() throws exception when expected and returns a boolean otherwise
+     * SimpleFlight - Test if isShort() throws exception when expected and returns a boolean otherwise
      */
     @Test
-    void SimpleFlightIsShort() {
+    void testSimpleFlightIsShort() {
         Duration nullDuration = null;
 
         Assertions.assertThrows(NullPointerException.class, () -> {flight.isShort(nullDuration);});
@@ -86,19 +86,38 @@ public class FlightTest {
     }
 
     @Test
-    void FlightGroupOf(){
+    void testFlightGroupOf(){
 
         FlightGroup flightGroup = FlightGroup.of(origin);
         Assertions.assertThrows(NullPointerException.class, () -> {FlightGroup.of(null);});
     }
 
     @Test
-    void FlightGroupAdd(){
+    void testFlightGroupAdd(){
 
-      //  Flight
+        FlightGroup flightGroup = FlightGroup.of(origin);
+        Assertions.assertTrue(flightGroup.add(flight));
+        Assertions.assertFalse(flightGroup.add(flight));
     }
 
+    @Test
+    void testFlightGroupRemove() {
 
+        FlightGroup flightGroup = FlightGroup.of(origin);
+        Assertions.assertFalse(flightGroup.remove(flight));
+        flightGroup.add(flight);
+        Assertions.assertTrue(flightGroup.remove(flight));
+
+    }
+
+    @Test
+    void testFlightGroupFlightsAtOrAfter() {
+
+        FlightGroup flightGroup = FlightGroup.of(origin);
+
+        Assertions.assertNotNull(flightGroup.flightsAtOrAfter(depart));
+        Assertions.assertNotNull(flightGroup.flightsAtOrAfter(LocalTime.MIDNIGHT));
+    }
     /**
      * Test FlightSchedule class
      */

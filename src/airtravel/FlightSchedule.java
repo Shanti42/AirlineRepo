@@ -27,6 +27,7 @@ public final class FlightSchedule {
         return arrivalTime;
     }
 
+    //build method
     public static final FlightSchedule of(LocalTime departureTime, LocalTime arrivalTime) {
         if (departureTime == null && arrivalTime == null){
             throw new NullPointerException("FlightSchedule - build() both departureTime and arrivalTime are null");
@@ -34,7 +35,7 @@ public final class FlightSchedule {
             throw new NullPointerException("FlightSchedule - build() departure time is null");
         } else if (arrivalTime == null){
             throw new NullPointerException("FlightSchedule - build() arrivalTime is null");
-        } else if (departureTime.isBefore(arrivalTime)) { //All airplanes fly during the day so no LocalTime needs to be wrapped after midnight
+        } else if (!departureTime.isBefore(arrivalTime)) { //All airplanes fly during the day so no LocalTime needs to be wrapped after midnight
             throw new IllegalArgumentException("Departure time must be earlier than arrival time");
         } else {
             return new FlightSchedule(departureTime, arrivalTime);

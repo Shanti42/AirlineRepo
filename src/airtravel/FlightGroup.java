@@ -39,11 +39,14 @@ public final class FlightGroup {
     public final boolean add(Flight flight){
         if(flight == null)
             throw new NullPointerException("FlightGroup - add() flight is null");
-        else if(!origin.getCode().equals(flight.getLeg().getOrigin().getCode()))
+        else if(!origin.getCode().equals(flight.origin().getCode()))
             throw new IllegalArgumentException("Flights must originate from the same airport to be added");
 
         Set<Flight> tempFlights = flights.get(flight.departureTime());
-        if(tempFlights.isEmpty() || !tempFlights.contains(flight)) {
+        if(tempFlights == null)
+            tempFlights = new HashSet<Flight>();
+
+        if(!tempFlights.contains(flight)) {
             tempFlights.add(flight);
             flights.put(flight.departureTime(), tempFlights);
             return true;
@@ -55,10 +58,12 @@ public final class FlightGroup {
     public final boolean remove(Flight flight){
         if(flight == null)
             throw new NullPointerException("FlightGroup - remove() flight is null");
-        if(!origin.getCode().equals(flight.getCode()))
+        if(!origin.getCode().equals(flight.origin().getCode()))
             throw new IllegalArgumentException("Flights must originate from the same airport to be removed");
 
         Set<Flight> tempFlights = flights.get(flight.departureTime());
+        if(tempFlights == null)
+            return false;
         if(tempFlights.contains(flight)) {
             tempFlights.remove(flight);
             flights.put(flight.departureTime(), tempFlights);
