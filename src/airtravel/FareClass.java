@@ -17,7 +17,7 @@ public final class FareClass {
         this.seatClass = seatClass;
     }
 
-    public static final FareClass of(int identifier, SeatClass seatClass){
+    public static final FareClass of(int identifier, SeatClass seatClass) {
         Objects.requireNonNull(identifier, "FareClass - of(), null identifier parameter provided");
         Objects.requireNonNull(seatClass, "FareClass - of(), null seat class parameter provided");
         return new FareClass(identifier, seatClass);
