@@ -65,11 +65,15 @@ public final class SeatConfiguration {
      * @return true if there are seats in any class, false otherwise
      */
     public final boolean hasSeats() {
+        boolean isSeats = false;
+        FoundSeats:
         for (SeatClass seatClass : SeatClass.values()) {
             if (seats(seatClass) > 0) {
-                return true;
+                isSeats = true;
+                break FoundSeats;
             }
+            //Else: there are no seats for that class
         }
-        return false;
+        return isSeats;
     }
 }
