@@ -1,6 +1,7 @@
 package airtravel;
 
 import java.time.LocalTime;
+import java.util.Objects;
 
 public final class SimpleFlight extends AbstractFlight {
 
@@ -10,20 +11,24 @@ public final class SimpleFlight extends AbstractFlight {
     private final Leg leg;
     //Flight Schedule
     private final FlightSchedule flightSchedule;
+    //Seats available in each seat class on the flight
+    private final SeatConfiguration seatsAvailable;
 
-    private SimpleFlight(String code, Leg leg, FlightSchedule flightSchedule) {
+    private SimpleFlight(String code, Leg leg, FlightSchedule flightSchedule, SeatConfiguration seatsAvailable) {
         this.code = code;
         this.leg = leg;
         this.flightSchedule = flightSchedule;
+        this.seatsAvailable = SeatConfiguration.clone(seatsAvailable);
     }
 
-    public static final SimpleFlight of(String code, Leg leg, FlightSchedule flightSchedule) {
-        if (code == null || leg == null || flightSchedule == null) {
-            throw new NullPointerException("SimpleFlight - build() Received null parameters");
-        } else {
-            leg.getOrigin().addFlight(new SimpleFlight(code, leg, flightSchedule));
-            return new SimpleFlight(code, leg, flightSchedule);
-        }
+    public static final SimpleFlight of(String code, Leg leg, FlightSchedule flightSchedule, SeatConfiguration seatsAvailable) {
+        Objects.requireNonNull(code, "SimpleFlight - build() Received null code parameter");
+        Objects.requireNonNull(leg, "SimpleFlight - build() Received null leg parameter");
+        Objects.requireNonNull(flightSchedule, "SimpleFlight - build() Received null flight Schedule parameter");
+        Objects.requireNonNull(seatsAvailable, "SimpleFlight - build() Received null seats available parameter");
+        SimpleFlight newFlight = new SimpleFlight(code, leg, flightSchedule, seatsAvailable);
+        leg.getOrigin().addFlight(newFlight);
+        return newFlight;
     }
 
     public String getCode() {
