@@ -23,6 +23,7 @@ public final class SeatConfiguration {
 
     //Creates a copy of the given seat configuration
     public static final SeatConfiguration clone(SeatConfiguration seatConfiguration) {
+        Objects.requireNonNull(seatConfiguration, "SeatConfiguration - clone() Received null Seat Configuration");
         return new SeatConfiguration(seatConfiguration.seats);
     }
 
@@ -35,6 +36,7 @@ public final class SeatConfiguration {
      * or zero if the number is null or negative
      */
     public final int seats(SeatClass seatClass) {
+        Objects.requireNonNull(seatClass, "SeatConfiguration - seats() Received null Seat Class parameter");
         Integer seatCount = seats.get(seatClass);
         if (seatCount != null && seatCount >= 0) {
             return seatCount;
@@ -51,6 +53,7 @@ public final class SeatConfiguration {
      * @return The previous number of seats available
      */
     public final int setSeats(SeatClass seatClass, int seats) {
+        Objects.requireNonNull(seatClass, "SeatConfiguration - setSeats() Received null seat class");
         int prevSeats = seats(seatClass);
         this.seats.put(seatClass, seats);
         return prevSeats;

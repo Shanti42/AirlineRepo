@@ -9,19 +9,34 @@ import java.time.Duration;
  */
 public interface Flight {
 
-    public String getCode(); //Returns the flight identifier
+    //Returns the flight identifier
+    public String getCode();
 
-    public Leg getLeg(); //Returns the flight leg
+    //Returns the flight leg
+    public Leg getLeg();
 
-    public Airport origin(); //Return start point of leg
+    //Return start point of leg
+    public Airport origin();
 
-    public Airport destination(); //Returns the end point of leg
+    //Returns the end point of leg
+    public Airport destination();
 
-    public FlightSchedule getFlightSchedule(); //Returns a FlightSchedule
+    //Returns a FlightSchedule
+    public FlightSchedule getFlightSchedule();
 
-    public LocalTime departureTime(); // Returns departureTime
+    //Returns departureTime
+    public LocalTime departureTime();
 
-    public LocalTime arrivalTime(); //Returns arrivalTime
+    //Returns arrivalTime
+    public LocalTime arrivalTime();
 
-    public boolean isShort(Duration durationMax); //Returns the value of isShort method
+    //Returns the value of isShort method
+    public boolean isShort(Duration durationMax);
+
+    //Returns seats available in seat classes for a passenger in the given fare class
+    public SeatConfiguration seatsAvailable(FareClass fareClass);
+
+    //Returns whether the flight has any seats available for the given fare class
+    public boolean hasSeats(FareClass fareClass);
+
 }

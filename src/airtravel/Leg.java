@@ -17,6 +17,12 @@ public final class Leg {
         this.destination = destination;
     }
 
+    public static final Leg of(Airport origin, Airport destination) {
+        Objects.requireNonNull(origin, "Origin is null");
+        Objects.requireNonNull(destination, "Destination is null");
+        return new Leg(origin, destination);
+    }
+
     public Airport getOrigin() {
         return origin;
     }
@@ -25,9 +31,4 @@ public final class Leg {
         return destination;
     }
 
-    public static final Leg of(Airport origin, Airport destination) {
-        Objects.requireNonNull(origin, "Origin is null");
-        Objects.requireNonNull(destination, "Destination is null");
-        return new Leg(origin, destination);
-    }
 }

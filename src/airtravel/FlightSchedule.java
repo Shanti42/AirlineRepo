@@ -20,14 +20,6 @@ public final class FlightSchedule {
         this.arrivalTime = arrivalTime;
     }
 
-    public LocalTime getDepartureTime() {
-        return departureTime;
-    }
-
-    public LocalTime getArrivalTime() {
-        return arrivalTime;
-    }
-
     //build method
     public static final FlightSchedule of(LocalTime departureTime, LocalTime arrivalTime) {
         Objects.requireNonNull(departureTime, "FlightSchedule - build() departure time is null");
@@ -44,6 +36,14 @@ public final class FlightSchedule {
         Objects.requireNonNull(durationMax, "FlightSchedule - isShort() durationMax is null");
         Duration travelTime = Duration.between(departureTime, arrivalTime);
         return travelTime.compareTo(durationMax) <= 0;
+    }
+
+    public LocalTime getDepartureTime() {
+        return departureTime;
+    }
+
+    public LocalTime getArrivalTime() {
+        return arrivalTime;
     }
 }
 

@@ -25,10 +25,6 @@ public final class FlightGroup {
         return new FlightGroup(origin);
     }
 
-    public Airport getOrigin() {
-        return origin;
-    }
-
     //Adds a flight to the collection mapped to its departure time
     public final boolean add(Flight flight){
         Objects.requireNonNull(flight, "FlightGroup - add() flight is null");
@@ -73,6 +69,10 @@ public final class FlightGroup {
             }
         }
         return tempFlights;
+    }
+
+    public Airport getOrigin() {
+        return origin;
     }
 
 }

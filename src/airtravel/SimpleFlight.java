@@ -31,6 +31,13 @@ public final class SimpleFlight extends AbstractFlight {
         return newFlight;
     }
 
+    //Returns a copy of all seats available, regardless of fare class
+    @Override
+    public SeatConfiguration seatsAvailable(FareClass fareClass) {
+        Objects.requireNonNull(fareClass, "SimpleFlight - seatsAvailable() Received null fare class parameter");
+        return SeatConfiguration.clone(seatsAvailable);
+    }
+
     public String getCode() {
         return code;
     }
