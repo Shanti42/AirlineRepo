@@ -1,5 +1,7 @@
 package airtravel;
 
+import java.util.Objects;
+
 /**
  * A non-stop route from departure to a destination
  */
@@ -24,14 +26,8 @@ public final class Leg {
     }
 
     public static final Leg of(Airport origin, Airport destination) {
-        if (origin == null && destination == null) {
-            throw new NullPointerException("Origin and destination are null");
-        } else if (origin == null) {
-            throw new NullPointerException("Origin is null");
-        } else if (destination == null) {
-            throw new NullPointerException("Destination is null");
-        } else {
-            return new Leg(origin, destination);
-        }
+        Objects.requireNonNull(origin, "Origin is null");
+        Objects.requireNonNull(destination, "Destination is null");
+        return new Leg(origin, destination);
     }
 }

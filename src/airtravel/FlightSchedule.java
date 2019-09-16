@@ -2,6 +2,7 @@ package airtravel;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.Objects;
 
 /**
  * A class that keeps track of departure and arrival time of a single flight
@@ -29,13 +30,9 @@ public final class FlightSchedule {
 
     //build method
     public static final FlightSchedule of(LocalTime departureTime, LocalTime arrivalTime) {
-        if (departureTime == null && arrivalTime == null) {
-            throw new NullPointerException("FlightSchedule - build() both departureTime and arrivalTime are null");
-        } else if (departureTime == null) {
-            throw new NullPointerException("FlightSchedule - build() departure time is null");
-        } else if (arrivalTime == null) {
-            throw new NullPointerException("FlightSchedule - build() arrivalTime is null");
-        } else if (!departureTime.isBefore(arrivalTime)) { //All airplanes fly during the day so no LocalTime needs to be wrapped after midnight
+        Objects.requireNonNull(departureTime, "FlightSchedule - build() departure time is null");
+        Objects.requireNonNull(arrivalTime, "FlightSchedule - build() arrivalTime is null");
+        if (!departureTime.isBefore(arrivalTime)) { //All airplanes fly during the day so no LocalTime needs to be wrapped after midnight
             throw new IllegalArgumentException("Departure time must be earlier than arrival time");
         } else {
             return new FlightSchedule(departureTime, arrivalTime);
@@ -44,9 +41,7 @@ public final class FlightSchedule {
 
     //Returns whether the flight is shorter then the given duration or not
     public final boolean isShort(Duration durationMax) {
-        if (durationMax == null) {
-            throw new NullPointerException("FlightSchedule - isShort() durationMax is null");
-        }
+        Objects.requireNonNull(durationMax, "FlightSchedule - isShort() durationMax is null");
         Duration travelTime = Duration.between(departureTime, arrivalTime);
         return travelTime.compareTo(durationMax) <= 0;
     }

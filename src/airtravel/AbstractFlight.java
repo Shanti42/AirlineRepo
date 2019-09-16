@@ -2,6 +2,7 @@ package airtravel;
 
 import java.time.LocalTime;
 import java.time.Duration;
+import java.util.Objects;
 
 public abstract class AbstractFlight implements Flight {
 
@@ -29,9 +30,7 @@ public abstract class AbstractFlight implements Flight {
 
     //Returns whether the flight is shorter then the given duration
     public boolean isShort(Duration durationMax) {
-        if (durationMax == null) {
-            throw new NullPointerException("Flight - isShort() durationMax is null");
-        }
+        Objects.requireNonNull(durationMax, "Flight - isShort() durationMax is null");
         return this.getFlightSchedule().isShort(durationMax);
     }
 }

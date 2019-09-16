@@ -1,6 +1,7 @@
 package airtravel;
 
 import java.time.Duration;
+import java.util.Objects;
 
 /**
  * The Airport on a route, including the identification code and the connection time of the airport
@@ -21,15 +22,9 @@ public final class Airport implements Comparable<Airport> {
     }
 
     public static final Airport of(String code, Duration connectionTimeMin) {
-        if (code == null && connectionTimeMin == null) {
-            throw new NullPointerException("Airport identifier code and connection time parameter are null");
-        } else if (code == null) {
-            throw new NullPointerException("Airport identifier code is null");
-        } else if (connectionTimeMin == null) {
-            throw new NullPointerException("Connection time parameter is null");
-        } else {
-            return new Airport(code, connectionTimeMin);
-        }
+        Objects.requireNonNull(code, "Airport identifier code is null");
+        Objects.requireNonNull(connectionTimeMin, "Connection time parameter is null");
+        return new Airport(code, connectionTimeMin);
     }
 
     public String getCode() {

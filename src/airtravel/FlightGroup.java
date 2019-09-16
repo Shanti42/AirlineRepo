@@ -1,10 +1,7 @@
 package airtravel;
 
 import java.time.LocalTime;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Represents a set of flights that have the same origin airport
@@ -24,11 +21,8 @@ public final class FlightGroup {
     }
 
     public static final FlightGroup of(Airport origin) {
-        if (origin == null){
-            throw new NullPointerException("FlightGroup - build() origin is null");
-        } else {
-            return new FlightGroup(origin);
-        }
+        Objects.requireNonNull(origin, "FlightGroup - build() origin is null");
+        return new FlightGroup(origin);
     }
 
     public Airport getOrigin() {
@@ -37,11 +31,10 @@ public final class FlightGroup {
 
     //Adds a flight to the collection mapped to its departure time
     public final boolean add(Flight flight){
-        if(flight == null)
-            throw new NullPointerException("FlightGroup - add() flight is null");
-        else if(!origin.getCode().equals(flight.origin().getCode()))
+        Objects.requireNonNull(flight, "FlightGroup - add() flight is null");
+        if(!origin.getCode().equals(flight.origin().getCode())) {
             throw new IllegalArgumentException("Flights must originate from the same airport to be added");
-
+        }
         Set<Flight> tempFlights = flights.get(flight.departureTime());
         if(tempFlights == null) {
             tempFlights = new HashSet<Flight>();
@@ -56,11 +49,10 @@ public final class FlightGroup {
 
     //Removes a flight if it is mapped to the collection of flights at its departure time
     public final boolean remove(Flight flight){
-        if(flight == null)
-            throw new NullPointerException("FlightGroup - remove() flight is null");
-        if(!origin.getCode().equals(flight.origin().getCode()))
+        Objects.requireNonNull("FlightGroup - remove() flight is null");
+        if(!origin.getCode().equals(flight.origin().getCode())) {
             throw new IllegalArgumentException("Flights must originate from the same airport to be removed");
-
+        }
         Set<Flight> tempFlights = flights.get(flight.departureTime());
         if(tempFlights != null && tempFlights.contains(flight)) {
             tempFlights.remove(flight);
@@ -72,9 +64,7 @@ public final class FlightGroup {
 
     //Returns a set of all flights before or after the given departure time
     public final Set<Flight> flightsAtOrAfter(LocalTime departureTime) {
-        if(departureTime == null)
-            throw new NullPointerException("FlightGroup - flightsAtOrAfter() departureTime is null");
-
+        Objects.requireNonNull(departureTime, "FlightGroup - flightsAtOrAfter() departureTime is null");
         Set<Flight> tempFlights = new HashSet<Flight>();
         Set<LocalTime> departTimes = flights.keySet();
         for(LocalTime departure: departTimes){
