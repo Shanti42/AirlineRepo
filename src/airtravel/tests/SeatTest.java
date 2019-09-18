@@ -1,44 +1,34 @@
 package airtravel.tests;
-import airtravel.SeatClass;
-import airtravel.SeatConfiguration;
+
+import airtravel.*;
+import airtravel.tests.AirportCodes.*;
 import org.junit.jupiter.api.Test;
 
-import java.lang.management.BufferPoolMXBean;
+
 import java.util.EnumMap;
-import java.util.function.Predicate;
 
 import static airtravel.SeatClass.*;
+import static airtravel.tests.AirportCodes.CLE;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SeatTest {
-    EnumMap<SeatClass, Integer> seats1 = new EnumMap<>(SeatClass.class);
-    EnumMap<SeatClass, Integer> seats2 = new EnumMap<>(SeatClass.class);
-    SeatConfiguration config1;
-    SeatConfiguration config2;
 
-    public SeatTest(){
-        seats1.put(ECONOMY, 10);
-        seats1.put(BUSINESS, 15);
-        seats2.put(ECONOMY, -2);
-        seats2.put(BUSINESS, 0);
-        config1 = SeatConfiguration.of(seats1);
-        config2 = SeatConfiguration.of(seats2);
-    }
+public class SeatTest extends FlightTest{
+
 
     /**
      * Test SeatConfiguration
      */
     @Test
-    void testSeatConfigurationOf(){
-        //checking null check
+    void testSeatConfigurationOf() {
+
         assertThrows(NullPointerException.class, () -> {
             SeatConfiguration.of(null);
-        });
+        }, "SeatConfigOf -> Check catches null value");
         assertEquals(config1.seats(BUSINESS), 15, "Test Seats initialized and value correct");
     }
 
     @Test
-    void testSeats(){
+    void testSeats() {
         assertEquals(config1.seats(ECONOMY), 10, "Test value assigned and retrieved from seats");
         assertEquals(config1.seats(PREMIUM_ECONONMY), 0, "Test null values for seats return 0");
         assertEquals(config2.seats(ECONOMY), 0, "Test seat value 0 on negative");
@@ -63,7 +53,40 @@ public class SeatTest {
         assertFalse(config.hasSeats(), "Test false when seats empty");
         assertFalse(config2.hasSeats(), "Test false when lots of zeros and nulls");
         assertTrue(config1.hasSeats(), "Test true when there are seats");
+    }
 
+    /**
+     * Test seats available
+     */
+
+    @Test
+    void testSimpleFlightSeatsAvailable() {
+
+        assertThrows(NullPointerException.class, () -> {
+            flight.seatsAvailable(null);
+        }, "check catches null fare class");
+        SimpleFlight flight1 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config1);
+
+
+        assertTrue(seatConfigSame(flight1.seatsAvailable(econFareClass), config1));
+
+
+    }
+
+    protected boolean seatConfigSame(SeatConfiguration config1, SeatConfiguration config2){
+        boolean isSame = true;
+        No_Match:
+        for(SeatClass seatClass: SeatClass.values()){
+            if(config1.seats(seatClass) != config2.seats(seatClass)){
+                isSame = false;
+                break No_Match;
+            }
+        }
+        return isSame;
+    }
+
+    @Test
+    void testFlightHasSeats() {
 
     }
 }

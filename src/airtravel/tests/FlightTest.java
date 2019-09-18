@@ -7,9 +7,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+
 import java.time.LocalTime;
 import java.time.Duration;
+import java.util.EnumMap;
 
+import static airtravel.SeatClass.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -35,6 +38,14 @@ public class FlightTest {
     public static FlightSchedule flightSchedule;
     public static Flight flight;
 
+    public EnumMap<SeatClass, Integer> seats1 = new EnumMap<>(SeatClass.class);
+    public EnumMap<SeatClass, Integer> seats2 = new EnumMap<>(SeatClass.class);
+    public SeatConfiguration config1;
+    public SeatConfiguration config2;
+    public static FareClass econFareClass = FareClass.of(3, ECONOMY);
+    public static FareClass busnFareClass = FareClass.of(7, BUSINESS);
+    public static FareClass premFareClass = FareClass.of(8, PREMIUM_ECONONMY);
+
     @BeforeAll
     void initializeFlights() {
         flightCode = "A112";
@@ -55,6 +66,15 @@ public class FlightTest {
         flightSchedule = FlightSchedule.of(depart, arrival);
 
         flight = SimpleFlight.of(flightCode, leg, flightSchedule);
+
+        seats1.put(ECONOMY, 10);
+        seats1.put(BUSINESS, 15);
+        seats2.put(ECONOMY, -2);
+        seats2.put(BUSINESS, 0);
+        config1 = SeatConfiguration.of(seats1);
+        config2 = SeatConfiguration.of(seats2);
+
+
     }
     /**
      *   SimpleFlight build method
