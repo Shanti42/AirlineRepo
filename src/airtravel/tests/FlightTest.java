@@ -7,11 +7,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+
 import java.time.LocalTime;
 import java.time.Duration;
 import java.util.EnumMap;
 import java.util.TreeMap;
 
+import static airtravel.SeatClass.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -40,6 +42,14 @@ public class FlightTest {
     public static SeatConfiguration seatConfig;
     public static Flight flight;
 
+    public EnumMap<SeatClass, Integer> seats1 = new EnumMap<>(SeatClass.class);
+    public EnumMap<SeatClass, Integer> seats2 = new EnumMap<>(SeatClass.class);
+    public SeatConfiguration config1;
+    public SeatConfiguration config2;
+    public static FareClass econFareClass = FareClass.of(3, ECONOMY);
+    public static FareClass busnFareClass = FareClass.of(7, BUSINESS);
+    public static FareClass premFareClass = FareClass.of(8, PREMIUM_ECONONMY);
+
     @BeforeAll
     void initializeFlights() {
         flightCode = "A112";
@@ -59,10 +69,15 @@ public class FlightTest {
 
         flightSchedule = FlightSchedule.of(depart, arrival);
 
-        map.put(SeatClass.BUSINESS, 10);
-        map.put(SeatClass.ECONOMY, 20);
-        seatConfig = SeatConfiguration.of(map);
-        flight = SimpleFlight.of(flightCode, leg, flightSchedule, seatConfig);
+
+        flight = SimpleFlight.of(flightCode, leg, flightSchedule);
+
+        seats1.put(ECONOMY, 10);
+        seats1.put(BUSINESS, 15);
+        seats2.put(ECONOMY, -2);
+        seats2.put(BUSINESS, 0);
+        config1 = SeatConfiguration.of(seats1);
+        config2 = SeatConfiguration.of(seats2);
     }
     /**
      *   SimpleFlight build method
@@ -160,6 +175,18 @@ public class FlightTest {
         assertTrue(hourFlight.isShort(oneHour), "Duration equal to flight");
         assertFalse(hourFlight.isShort(mins30), "Duration shorter than flight");
         assertTrue(hourFlight.isShort(twoHour), "Duration longer than flight");
+    }
+
+    protected boolean seatConfigSame(SeatConfiguration config1, SeatConfiguration config2){
+        boolean isSame = true;
+        No_Match:
+        for(SeatClass seatClass: SeatClass.values()){
+            if(config1.seats(seatClass) != config2.seats(seatClass)){
+                isSame = false;
+                break No_Match;
+            }
+        }
+        return isSame;
     }
 
 
