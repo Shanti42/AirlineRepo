@@ -12,7 +12,7 @@ import static airtravel.tests.AirportCodes.CLE;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class SeatTest extends FlightTest{
+public class SeatTest extends FlightTest {
 
 
     /**
@@ -54,25 +54,6 @@ public class SeatTest extends FlightTest{
         assertFalse(config2.hasSeats(), "Test false when lots of zeros and nulls");
         assertTrue(config1.hasSeats(), "Test true when there are seats");
     }
-
-    /**
-     * Test seats available
-     */
-
-    @Test
-    void testSimpleFlightSeatsAvailable() {
-
-        assertThrows(NullPointerException.class, () -> {
-            flight.seatsAvailable(null);
-        }, "check catches null fare class");
-        SimpleFlight flight1 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config1);
-
-
-        assertTrue(seatConfigSame(flight1.seatsAvailable(econFareClass), config1));
-
-
-    }
-
 
 
     @Test

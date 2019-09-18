@@ -7,13 +7,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-
 import java.time.LocalTime;
 import java.time.Duration;
 import java.util.EnumMap;
 import java.util.TreeMap;
 
 import static airtravel.SeatClass.*;
+import static airtravel.tests.AirportCodes.CLE;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -48,7 +48,8 @@ public class FlightTest {
     public SeatConfiguration config2;
     public static FareClass econFareClass = FareClass.of(3, ECONOMY);
     public static FareClass busnFareClass = FareClass.of(7, BUSINESS);
-    public static FareClass premFareClass = FareClass.of(8, PREMIUM_ECONONMY);
+    public static FareClass premFareClass = FareClass.of(8, PREMIUM_ECONOMY);
+    SimpleFlight flight1;
 
     @BeforeAll
     void initializeFlights() {
@@ -69,8 +70,12 @@ public class FlightTest {
 
         flightSchedule = FlightSchedule.of(depart, arrival);
 
+        map.put(BUSINESS, 10);
+        map.put(ECONOMY, 20);
+        seatConfig = SeatConfiguration.of(map);
+        flight = SimpleFlight.of(flightCode, leg, flightSchedule, seatConfig);
 
-        flight = SimpleFlight.of(flightCode, leg, flightSchedule);
+        flight1 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config1);
 
         seats1.put(ECONOMY, 10);
         seats1.put(BUSINESS, 15);
@@ -144,6 +149,26 @@ public class FlightTest {
         Assertions.assertNotNull(flightGroup.flightsAtOrAfter(depart));
         Assertions.assertNotNull(flightGroup.flightsAtOrAfter(LocalTime.MIDNIGHT));
     }
+
+    @Test
+    void testSimpleFlightSeatsAvailable() {
+
+        assertThrows(NullPointerException.class, () -> {
+            flight.seatsAvailable(null);
+        }, "check catches null fare class");
+        assertTrue(seatConfigSame(flight1.seatsAvailable(econFareClass), config1), "Check returns proper SeatConfiguration");
+    }
+
+
+    @Test
+    void testSimpleAndAbstractFlightHasSeats(){
+        assertThrows(NullPointerException.class, () -> {
+            flight.hasSeats(null);
+        }, "check catches null fare class");
+        assertTrue(flight1.hasSeats(econFareClass), "Test there are seats for fare class");
+        assertFalse(flight1.hasSeats(premFareClass), "Test no seats for fare class");
+    }
+
     /**
      * Test FlightSchedule class
      */
