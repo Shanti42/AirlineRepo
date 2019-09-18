@@ -171,5 +171,17 @@ public class FlightTest {
         assertTrue(hourFlight.isShort(twoHour), "Duration longer than flight");
     }
 
+    protected boolean seatConfigSame(SeatConfiguration config1, SeatConfiguration config2){
+        boolean isSame = true;
+        No_Match:
+        for(SeatClass seatClass: SeatClass.values()){
+            if(config1.seats(seatClass) != config2.seats(seatClass)){
+                isSame = false;
+                break No_Match;
+            }
+        }
+        return isSame;
+    }
+
 
 }
