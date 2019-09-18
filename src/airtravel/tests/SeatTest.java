@@ -40,7 +40,7 @@ public class SeatTest {
     @Test
     void testSeats(){
         assertEquals(config1.seats(ECONOMY), 10, "Test value assigned and retrieved from seats");
-        assertEquals(config1.seats(PREMIUM_ECONONMY), 0, "Test null values for seats return 0");
+        assertEquals(config1.seats(PREMIUM_ECONOMY), 0, "Test null values for seats return 0");
         assertEquals(config2.seats(ECONOMY), 0, "Test seat value 0 on negative");
         assertEquals(config2.seats(BUSINESS), 0, "Tests seat value 0 on 0");
     }
@@ -50,7 +50,7 @@ public class SeatTest {
         EnumMap<SeatClass, Integer> seats = new EnumMap<>(SeatClass.class);
         SeatConfiguration config = SeatConfiguration.of(seats);
         assertEquals(config.setSeats(ECONOMY, 10), 0, "Test setting seats from null Economy");
-        assertEquals(config.setSeats(PREMIUM_ECONONMY, 15), 0, "Test setting seats from null Premium Economy");
+        assertEquals(config.setSeats(PREMIUM_ECONOMY, 15), 0, "Test setting seats from null Premium Economy");
         assertEquals(config.setSeats(BUSINESS, 20), 0, "Test setting seats from null Business");
         assertEquals(config.setSeats(BUSINESS, 15), 20, "Test setting value over existing");
         assertEquals(config.setSeats(BUSINESS, 1), 15, "Test setting value over existing saved");
