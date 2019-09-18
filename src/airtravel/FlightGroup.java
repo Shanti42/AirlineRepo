@@ -31,6 +31,9 @@ public final class FlightGroup {
         if(!origin.getCode().equals(flight.origin().getCode())) {
             throw new IllegalArgumentException("Flights must originate from the same airport to be added");
         }
+
+        return flights.computeIfAbsent(flight.departureTime(), flights ->new HashSet<>()).add(flight);
+        /*
         Set<Flight> tempFlights = flights.get(flight.departureTime());
         if(tempFlights == null) {
             tempFlights = new HashSet<Flight>();
@@ -40,7 +43,7 @@ public final class FlightGroup {
             flights.put(flight.departureTime(), tempFlights);
             return true;
         }
-        return false;
+        return false;*/
     }
 
     //Removes a flight if it is mapped to the collection of flights at its departure time
@@ -61,14 +64,16 @@ public final class FlightGroup {
     //Returns a set of all flights before or after the given departure time
     public final Set<Flight> flightsAtOrAfter(LocalTime departureTime) {
         Objects.requireNonNull(departureTime, "FlightGroup - flightsAtOrAfter() departureTime is null");
+        return  (Set)flights.tailMap(departureTime).values();
+       /*
         Set<Flight> tempFlights = new HashSet<Flight>();
         Set<LocalTime> departTimes = flights.keySet();
-        for(LocalTime departure: departTimes){
-            if(departure.equals(departureTime) || departure.isBefore(departureTime)) {
-                tempFlights.addAll(flights.get(departure));
+        for(LocalTime iterTime: departTimes){
+            if(iterTime.equals(departureTime) || iterTime.isBefore(departureTime)) {
+                tempFlights.addAll(flights.get(iterTime));
             }
         }
-        return tempFlights;
+        return tempFlights;*/
     }
 
     public Airport getOrigin() {

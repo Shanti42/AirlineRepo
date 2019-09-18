@@ -42,4 +42,7 @@ public abstract class AbstractFlight implements Flight {
         Objects.requireNonNull(fareClass, "hasSeats() - null fare class parameter provided");
         return seatsAvailable(fareClass).hasSeats();
     }
+
+    @Override
+    public int hashCode() { return getCode().hashCode(); }
 }

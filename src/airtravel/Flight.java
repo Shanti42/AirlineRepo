@@ -39,4 +39,7 @@ public interface Flight {
     //Returns whether the flight has any seats available for the given fare class
     public boolean hasSeats(FareClass fareClass);
 
+    @Override
+    public int hashCode();
+
 }
