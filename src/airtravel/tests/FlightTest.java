@@ -10,6 +10,7 @@ import org.junit.jupiter.api.TestInstance;
 import java.time.LocalTime;
 import java.time.Duration;
 import java.util.EnumMap;
+import java.util.Set;
 import java.util.TreeMap;
 
 import static airtravel.SeatClass.*;
@@ -75,14 +76,14 @@ public class FlightTest {
         seatConfig = SeatConfiguration.of(map);
         flight = SimpleFlight.of(flightCode, leg, flightSchedule, seatConfig);
 
-        flight1 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config1);
-
         seats1.put(ECONOMY, 10);
         seats1.put(BUSINESS, 15);
         seats2.put(ECONOMY, -2);
         seats2.put(BUSINESS, 0);
         config1 = SeatConfiguration.of(seats1);
         config2 = SeatConfiguration.of(seats2);
+
+        flight1 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config1);
     }
     /**
      *   SimpleFlight build method
@@ -124,17 +125,30 @@ public class FlightTest {
     @Test
     void testFlightGroupAdd(){
 
+        Flight nullFlight = null;
+        //Flight intentionally created with wrong origin for testing purposes
+        Flight badOriginFlight = SimpleFlight.of("Code", Leg.of(Airport.of("JFK",Duration.ofHours(3)),destination),flightSchedule,config1);
+
         FlightGroup flightGroup = FlightGroup.of(origin);
+
+        assertThrows(NullPointerException.class, () -> {flightGroup.add(nullFlight);});
+        assertThrows(IllegalArgumentException.class, () -> {flightGroup.add(badOriginFlight);});
         Assertions.assertTrue(flightGroup.add(flight));
         Assertions.assertFalse(flightGroup.add(flight));
 
-        Assertions.assertTrue(flightGroup.flightsAtOrAfter(flight.departureTime()).contains(flight));
     }
 
     @Test
     void testFlightGroupRemove() {
 
+        Flight nullFlight = null;
+        //Flight intentionally created with wrong origin for testing purposes
+        Flight badOriginFlight = SimpleFlight.of("Code", Leg.of(Airport.of("JFK",Duration.ofHours(3)),destination),flightSchedule,config1);
+
         FlightGroup flightGroup = FlightGroup.of(origin);
+
+        assertThrows(NullPointerException.class, () -> {flightGroup.add(nullFlight);});
+        assertThrows(IllegalArgumentException.class, () -> {flightGroup.add(badOriginFlight);});
         Assertions.assertFalse(flightGroup.remove(flight));
         flightGroup.add(flight);
         Assertions.assertTrue(flightGroup.remove(flight));

@@ -45,4 +45,5 @@ public abstract class AbstractFlight implements Flight {
 
     @Override
     public int hashCode() { return getCode().hashCode(); }
+
 }

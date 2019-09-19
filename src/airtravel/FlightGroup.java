@@ -2,6 +2,7 @@ package airtravel;
 
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Represents a set of flights that have the same origin airport
@@ -31,7 +32,6 @@ public final class FlightGroup {
         if(!origin.getCode().equals(flight.origin().getCode())) {
             throw new IllegalArgumentException("Flights must originate from the same airport to be added");
         }
-
         return flights.computeIfAbsent(flight.departureTime(), flights ->new HashSet<>()).add(flight);
         /*
         Set<Flight> tempFlights = flights.get(flight.departureTime());
@@ -52,19 +52,15 @@ public final class FlightGroup {
         if(!origin.getCode().equals(flight.origin().getCode())) {
             throw new IllegalArgumentException("Flights must originate from the same airport to be removed");
         }
-        Set<Flight> tempFlights = flights.get(flight.departureTime());
-        if(tempFlights != null && tempFlights.contains(flight)) {
-            tempFlights.remove(flight);
-            flights.put(flight.departureTime(), tempFlights);
-            return true;
-        }
-        return false;
+        return flights.computeIfPresent(flight.departureTime(), (key, oldVal) -> { oldVal.remove(flight);
+            return oldVal;}) != null;
     }
 
     //Returns a set of all flights before or after the given departure time
     public final Set<Flight> flightsAtOrAfter(LocalTime departureTime) {
         Objects.requireNonNull(departureTime, "FlightGroup - flightsAtOrAfter() departureTime is null");
-        return  (Set)flights.tailMap(departureTime).values();
+        Set set = flights.tailMap(departureTime).values().stream().collect(Collectors.toSet());
+        return set;
        /*
         Set<Flight> tempFlights = new HashSet<Flight>();
         Set<LocalTime> departTimes = flights.keySet();
