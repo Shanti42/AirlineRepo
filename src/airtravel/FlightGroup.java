@@ -41,10 +41,12 @@ public final class FlightGroup {
         if (!origin.getCode().equals(flight.origin().getCode())) {
             throw new IllegalArgumentException("Flights must originate from the same airport to be removed");
         }
-        return flights.computeIfPresent(flight.departureTime(), (key, oldVal) -> {
-            oldVal.remove(flight);
-            return oldVal;
-        }) != null;
+
+        try {
+            return flights.computeIfPresent(flight.departureTime(), (key, oldVal) -> oldVal).remove(flight);
+        } catch(NullPointerException e){
+            return false;
+        }
     }
 
     //Returns a set of all flights before or after the given departure time
