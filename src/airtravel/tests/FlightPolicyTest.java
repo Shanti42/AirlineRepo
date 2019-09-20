@@ -51,15 +51,16 @@ public class FlightPolicyTest extends FlightTest {
     @Test
     void testLimitedFlightPolicy() {
         blankPolicy = blankPolicy();
-        FlightPolicy blankFlight = FlightPolicy.of(flight3, blankPolicy);
+        FlightPolicy blankFlight = FlightPolicy.of(flight, blankPolicy);
         Flight limitedFlight1 = FlightPolicy.limited(blankFlight);
-        SeatConfiguration buisRem = SeatConfiguration.clone(config3);
+        SeatConfiguration buisRem = SeatConfiguration.clone(seatConfig);
         buisRem.setSeats(BUSINESS, 0);
-        SeatConfiguration econRem = SeatConfiguration.clone(config3);
+        SeatConfiguration econRem = SeatConfiguration.clone(seatConfig);
         econRem.setSeats(ECONOMY, 0);
-        SeatConfiguration econPremRem = SeatConfiguration.clone(config3);
-        econPremRem.setSeats(ECONOMY, 0);
-        econPremRem.setSeats(PREMIUM_ECONOMY, 0);
+        EnumMap<SeatClass, Integer> map = new EnumMap<SeatClass, Integer>(SeatClass.class);
+        map.put(SeatClass.BUSINESS, 10);
+        SeatConfiguration econPremRem  = SeatConfiguration.of(map);
+
 
         assertTrue(seatConfigSame(buisRem, limitedFlight1.seatsAvailable(econFareClass)), "Test limited with lowest class passenger");
         assertTrue(seatConfigSame(econRem, limitedFlight1.seatsAvailable(premFareClass)), "Test limited with premium (middle) class passenger");
@@ -101,7 +102,8 @@ public class FlightPolicyTest extends FlightTest {
          */
         blankPolicy = blankPolicy();
         Flight blankFlight = FlightPolicy.of(flight, blankPolicy);
-        BiFunction<SeatConfiguration, FareClass, SeatConfiguration> selectiveLimited = (config, fareClass) -> {
+
+        Flight testSelectiveRest = FlightPolicy.of(flight, (config, fareClass) -> {
             SeatClass seatClass = fareClass.getSeatClass();
             EnumMap<SeatClass, Integer> map = justYourClass(seatClass, config);
 
@@ -110,7 +112,10 @@ public class FlightPolicyTest extends FlightTest {
                 map.put(classAbove, config.seats(classAbove));
             }
             return SeatConfiguration.of(map);
-        };
+        });
+
+
+        assertTrue();
 
     }
 
