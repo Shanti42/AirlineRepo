@@ -111,7 +111,9 @@ public class FlightPolicyTest extends FlightTest {
             }
             return SeatConfiguration.of(map);
         };
-
+        Flight selectiveLimite
+        System.out.println()
+        assertTrue()
 
         /**
          * This policy never allows anyone to fly Economy
