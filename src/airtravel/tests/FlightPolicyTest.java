@@ -102,6 +102,19 @@ public class FlightPolicyTest extends FlightTest {
         });
     }
 
+    @Test
+    void testPolicyComposition() {
+        blankPolicy = blankPolicy();
+
+        FlightPolicy blankFlight = FlightPolicy.of(flight,blankPolicy);
+
+        Flight reservedStrictFlight = FlightPolicy.reserve(FlightPolicy.strict(blankFlight), 1);
+        EnumMap<SeatClass, Integer> map = new EnumMap<SeatClass, Integer>(SeatClass.class);
+        map.put(SeatClass.BUSINESS,9);
+
+        assertTrue(seatConfigSame(SeatConfiguration.of(map), reservedStrictFlight.seatsAvailable(busnFareClass)));
+
+    }
 
     protected BiFunction<SeatConfiguration, FareClass, SeatConfiguration> blankPolicy() {
         BiFunction<SeatConfiguration, FareClass, SeatConfiguration> blankPolicy = (seatConfig, fareClass) -> { return SeatConfiguration.clone(seatConfig); };
