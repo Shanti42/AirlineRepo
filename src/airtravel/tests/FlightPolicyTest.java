@@ -113,12 +113,14 @@ public class FlightPolicyTest extends FlightTest {
             }
             return SeatConfiguration.of(map);
 
-        };
-        Flight selectiveLimite
-        System.out.println()
-        assertTrue()
+        });
 
+        EnumMap<SeatClass, Integer> selectiveMap = new EnumMap<SeatClass, Integer>(SeatClass.class);
+        map.put(ECONOMY, 20);
+        map.put(BUSINESS, 10);
+        map.put(PREMIUM_ECONOMY, 0);
 
+        assertTrue(seatConfigSame(SeatConfiguration.of(selectiveMap),testSelectiveRest.seatsAvailable(busnFareClass)));
         /**
          * This policy never allows anyone to fly Economy
          *
