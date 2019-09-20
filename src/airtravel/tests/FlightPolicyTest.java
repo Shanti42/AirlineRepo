@@ -2,9 +2,6 @@ package airtravel.tests;
 
 import airtravel.*;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,9 +58,7 @@ public class FlightPolicyTest extends FlightTest {
         map.put(SeatClass.BUSINESS, 10);
         SeatConfiguration econPremRem  = SeatConfiguration.of(map);
 
-
-        assertTrue(seatConfigSame(buisRem, limitedFlight1.seatsAvailable(econFareClass)), "Test limited with lowest class passenger");
-        assertTrue(seatConfigSame(econRem, limitedFlight1.seatsAvailable(premFareClass)), "Test limited with premium (middle) class passenger");
+        
         assertTrue(seatConfigSame(econPremRem, limitedFlight1.seatsAvailable(busnFareClass)), "Test limited with highest class passenger");
     }
 
