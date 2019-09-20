@@ -22,8 +22,9 @@ public final class FlightPolicy extends AbstractFlight {
         Objects.requireNonNull(policy, "FlightPolicy - build() received null policy parameter");
 
         FlightPolicy newFlight = new FlightPolicy(flight, policy);
-        flight.origin().removeFlight(flight);
-        flight.origin().addFlight(newFlight);
+        if(flight.origin().removeFlight(flight)){
+            flight.origin().addFlight(newFlight);
+        }
         return newFlight;
     }
     public String getCode() {
