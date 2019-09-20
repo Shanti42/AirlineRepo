@@ -51,6 +51,7 @@ public class FlightTest {
     public static FareClass busnFareClass = FareClass.of(7, BUSINESS);
     public static FareClass premFareClass = FareClass.of(8, PREMIUM_ECONOMY);
     SimpleFlight flight1;
+    SimpleFlight flight2;
 
     @BeforeAll
     void initializeFlights() {
@@ -84,6 +85,7 @@ public class FlightTest {
         config2 = SeatConfiguration.of(seats2);
 
         flight1 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config1);
+        flight2 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config2);
     }
     /**
      *   SimpleFlight build method
@@ -180,7 +182,8 @@ public class FlightTest {
             flight.hasSeats(null);
         }, "check catches null fare class");
         assertTrue(flight1.hasSeats(econFareClass), "Test there are seats for fare class");
-        assertFalse(flight1.hasSeats(premFareClass), "Test no seats for fare class");
+        assertTrue(flight1.hasSeats(premFareClass), "There are seats");
+        assertFalse(flight2.hasSeats(premFareClass), "Test no seats available");
     }
 
     /**
