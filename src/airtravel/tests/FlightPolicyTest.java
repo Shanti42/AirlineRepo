@@ -112,10 +112,11 @@ public class FlightPolicyTest extends FlightTest {
 
         EnumMap<SeatClass, Integer> selectiveMap = new EnumMap<SeatClass, Integer>(SeatClass.class);
         map.put(ECONOMY, 20);
-        map.put(BUSINESS, 10);
+        map.put(BUSINESS, 0);
         map.put(PREMIUM_ECONOMY, 0);
 
-        assertTrue(seatConfigSame(SeatConfiguration.of(selectiveMap),testSelectiveRest.seatsAvailable(busnFareClass)));
+
+        assertFalse(seatConfigSame(SeatConfiguration.of(selectiveMap),testSelectiveRest.seatsAvailable(econFareClass)));
         /**
          * This policy never allows anyone to fly Economy
          *
