@@ -54,7 +54,11 @@ public final class SeatConfiguration {
      */
     public final int setSeats(SeatClass seatClass, int seats) {
         Objects.requireNonNull(seatClass, "SeatConfiguration - setSeats() Received null seat class");
-        return this.seats.put(seatClass, seats);
+        try {
+            return this.seats.put(seatClass, seats);
+        } catch (Exception e){
+            return 0;
+        }
     }
 
     /**
