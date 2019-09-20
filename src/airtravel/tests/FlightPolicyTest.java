@@ -15,12 +15,7 @@ import java.util.function.BiFunction;
 public class FlightPolicyTest extends FlightTest {
 
     public BiFunction<SeatConfiguration, FareClass, SeatConfiguration> blankPolicy;
-    FlightPolicy limitedFlight1;
 
-
-    public FlightPolicyTest(){
-        //limitedFlight1 = FlightPolicy.limited(flight3));
-    }
 
     @Test
     void testFlightPolicyOf() {
@@ -53,6 +48,9 @@ public class FlightPolicyTest extends FlightTest {
 
     @Test
     void testLimitedFlightPolicy(){
+        blankPolicy = blankPolicy();
+        FlightPolicy blankFlight = FlightPolicy.of(flight,blankPolicy);
+        Flight limitedFlight1 = FlightPolicy.limited(blankFlight);
         SeatConfiguration buisRem = SeatConfiguration.clone(config3);
         buisRem.setSeats(BUSINESS, 0);
         SeatConfiguration econRem = SeatConfiguration.clone(config3);
