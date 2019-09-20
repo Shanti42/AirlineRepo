@@ -104,8 +104,8 @@ public class FlightTest {
         seats4.put(BUSINESS, 0);
         seats4.put(PREMIUM_ECONOMY, 4);
 
-        config3 = SeatConfiguration.of(seats1);
-        config4 = SeatConfiguration.of(seats2);
+        config3 = SeatConfiguration.of(seats3);
+        config4 = SeatConfiguration.of(seats4);
 
 
         flight1 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config1);
