@@ -10,6 +10,7 @@ import org.junit.jupiter.api.TestInstance;
 import java.time.LocalTime;
 import java.time.Duration;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -154,16 +155,17 @@ public class FlightTest {
         Assertions.assertFalse(flightGroup.remove(flight));
         flightGroup.add(flight);
         Assertions.assertTrue(flightGroup.remove(flight));
+        assertFalse(flightGroup.remove(flight));
 
     }
 
     @Test
     void testFlightGroupFlightsAtOrAfter() {
 
-        FlightGroup flightGroup = FlightGroup.of(origin);
+        FlightGroup flightGroup = FlightGroup.of(Airport.of("LGA",Duration.ofHours(1)));
 
         Assertions.assertNotNull(flightGroup.flightsAtOrAfter(depart));
-        Assertions.assertNotNull(flightGroup.flightsAtOrAfter(LocalTime.MIDNIGHT));
+        Assertions.assertEquals(new HashSet<>(), flightGroup.flightsAtOrAfter(LocalTime.MIDNIGHT));
     }
 
     @Test
