@@ -32,7 +32,6 @@ public abstract class AbstractFlight implements Flight {
 
     //Returns whether the flight is shorter then the given duration
     public boolean isShort(Duration durationMax) {
-        Objects.requireNonNull(durationMax, "Flight - isShort() durationMax is null");
         return this.getFlightSchedule().isShort(durationMax);
     }
 

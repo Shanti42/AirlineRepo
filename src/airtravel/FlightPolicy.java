@@ -51,7 +51,7 @@ public final class FlightPolicy extends AbstractFlight {
         BiFunction<SeatConfiguration, FareClass, SeatConfiguration> strictPolicy = (seatConfig, fareClass) -> {
             SeatClass seatClass = fareClass.getSeatClass();
             EnumMap<SeatClass, Integer> map = new EnumMap<>(SeatClass.class);
-            map.put(seatClass,seatConfig.seats(seatClass));
+            map.put(seatClass, seatConfig.seats(seatClass));
             return SeatConfiguration.of(map);
         };
 
@@ -86,7 +86,18 @@ public final class FlightPolicy extends AbstractFlight {
     public static final Flight limited(Flight flight) {
         Objects.requireNonNull(flight, "FlightPolicy - limited() received null flight parameter");
 
-        return flight;
+        BiFunction<SeatConfiguration, FareClass, SeatConfiguration> limitedPolicy = (seatConfig, fareClass) -> {
+            SeatClass seatClass = fareClass.getSeatClass();
+            EnumMap<SeatClass, Integer> map = new EnumMap<>(SeatClass.class);
+            map.put(seatClass, seatConfig.seats(seatClass));
+            if(seatClass.ordinal() < SeatClass.values().length-1) {
+                SeatClass classAbove = SeatClass.values()[seatClass.ordinal()+1];
+                map.put(classAbove, seatConfig.seats(classAbove));
+            }
+            return SeatConfiguration.of(map);
+        };
+
+        return FlightPolicy.of(flight,limitedPolicy);
 
     }
 
