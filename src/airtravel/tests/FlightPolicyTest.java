@@ -107,10 +107,11 @@ public class FlightPolicyTest extends FlightTest {
                 map.put(classAbove, config.seats(classAbove));
             }
             return SeatConfiguration.of(map);
-        });
 
-
-        assertTrue();
+        };
+        Flight selectiveLimite
+        System.out.println()
+        assertTrue()
 
 
         /**
