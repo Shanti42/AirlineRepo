@@ -117,6 +117,20 @@ public class FlightPolicyTest extends FlightTest {
 
         assertTrue();
 
+
+        /**
+         * This policy never allows anyone to fly Economy
+         *
+         */
+        BiFunction<SeatConfiguration, FareClass, SeatConfiguration> noEconomy = (config, fareClass) -> {
+            EnumMap<SeatClass, Integer> map = new EnumMap<SeatClass, Integer>(SeatClass.class);
+            map.put(ECONOMY, 0);
+            return SeatConfiguration.of(map);
+        };
+        EnumMap<SeatClass, Integer> noEconMap = new EnumMap<SeatClass, Integer>(SeatClass.class);
+        noEconMap.put(ECONOMY, 0);
+
+        assertTrue(seatConfigSame(SeatConfiguration.of(noEconMap), FlightPolicy.of(flight, noEconomy).seatsAvailable(econFareClass)));
     }
 
 
