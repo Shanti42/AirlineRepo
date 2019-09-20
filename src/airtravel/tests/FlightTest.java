@@ -45,13 +45,25 @@ public class FlightTest {
 
     public EnumMap<SeatClass, Integer> seats1 = new EnumMap<>(SeatClass.class);
     public EnumMap<SeatClass, Integer> seats2 = new EnumMap<>(SeatClass.class);
+    public EnumMap<SeatClass, Integer> seats3 = new EnumMap<>(SeatClass.class);
+    public EnumMap<SeatClass, Integer> seats4 = new EnumMap<>(SeatClass.class);
+    public EnumMap<SeatClass, Integer> seats3Limited = new EnumMap<>(SeatClass.class);
+
     public SeatConfiguration config1;
     public SeatConfiguration config2;
+    public SeatConfiguration config3;
+    public SeatConfiguration config4;
+
+
     public static FareClass econFareClass = FareClass.of(3, ECONOMY);
     public static FareClass busnFareClass = FareClass.of(7, BUSINESS);
     public static FareClass premFareClass = FareClass.of(8, PREMIUM_ECONOMY);
+
+
     SimpleFlight flight1;
     SimpleFlight flight2;
+    Flight flight3;
+    Flight flight4;
 
     @BeforeAll
     void initializeFlights() {
@@ -84,8 +96,21 @@ public class FlightTest {
         config1 = SeatConfiguration.of(seats1);
         config2 = SeatConfiguration.of(seats2);
 
+        seats3.put(ECONOMY, 2);
+        seats3.put(BUSINESS, 15);
+        seats3.put(PREMIUM_ECONOMY, 8);
+        seats4.put(ECONOMY, -2);
+        seats4.put(BUSINESS, 0);
+        seats4.put(PREMIUM_ECONOMY, 4);
+
+        config3 = SeatConfiguration.of(seats1);
+        config4 = SeatConfiguration.of(seats2);
+
+
         flight1 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config1);
         flight2 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config2);
+        flight3 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config3);
+        flight4 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config4);
     }
     /**
      *   SimpleFlight build method
