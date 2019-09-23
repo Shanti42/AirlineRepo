@@ -16,13 +16,21 @@ final class RouteState {
     private RouteState(Set<Airport> airports, Airport origin, LocalTime departureTime){
         unreached = new TreeSet<>();
         airportNode = new HashMap<>();
-        airportNode.put(origin, RouteNode.of(origin, new RouteTime(departureTime.plus(origin.getConnectionTimeMin())), null));
+        airportNode.put(origin, RouteNode.of(origin, new RouteTime(departureTime), null));
         RouteNode tempNode;
         for(Airport airport: airports){
             tempNode = RouteNode.of(airport);
             airportNode.put(airport, tempNode);
             unreached.add(tempNode);
         }
+    }
+
+    //build method
+    static RouteState of(Set<Airport> airports, Airport origin, LocalTime departureTime){
+        Objects.requireNonNull(airports, "RouteState, of() -> null airport set");
+        Objects.requireNonNull(origin, "RouteState, of() -> null origin airport");
+        Objects.requireNonNull(departureTime, "RouteState, of() -> null departure time");
+        return new RouteState(airports, origin, departureTime);
     }
 
     //replaces the route node for the corresponding airport, assumes airport is in the route state and is unreached
