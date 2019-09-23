@@ -58,6 +58,7 @@ public class FlightTest {
 
     public static FareClass econFareClass = FareClass.of(3, ECONOMY);
     public static FareClass busnFareClass = FareClass.of(7, BUSINESS);
+    public static FareClass busnFareClassLow = FareClass.of(7, BUSINESS);
     public static FareClass premFareClass = FareClass.of(8, PREMIUM_ECONOMY);
 
 
@@ -246,7 +247,7 @@ public class FlightTest {
         assertTrue(hourFlight.isShort(twoHour), "Duration longer than flight");
     }
 
-    protected boolean seatConfigSame(SeatConfiguration config1, SeatConfiguration config2){
+    boolean seatConfigSame(SeatConfiguration config1, SeatConfiguration config2){
         boolean isSame = true;
         No_Match:
         for(SeatClass seatClass: SeatClass.values()){
@@ -256,6 +257,12 @@ public class FlightTest {
             }
         }
         return isSame;
+    }
+
+    void printSeatConfig(SeatConfiguration seatConfig){
+        for(SeatClass seatClass: SeatClass.values()) {
+            System.out.println(seatConfig.seats(seatClass));
+        }
     }
 
 
