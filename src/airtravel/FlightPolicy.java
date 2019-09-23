@@ -65,8 +65,7 @@ public final class FlightPolicy extends AbstractFlight {
         if(flight.isShort(durationMax)) {
             return strict(flight);
         } else {
-            BiFunction<SeatConfiguration, FareClass, SeatConfiguration> restrictedPolicy = (seatConfig, fareClass) -> { return SeatConfiguration.clone(seatConfig); };
-            return FlightPolicy.of(flight, restrictedPolicy);
+            return flight;
         }
     }
 

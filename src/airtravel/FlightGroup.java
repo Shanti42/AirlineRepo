@@ -29,7 +29,7 @@ public final class FlightGroup {
     //Adds a flight to the collection mapped to its departure time
     public final boolean add(Flight flight) {
         Objects.requireNonNull(flight, "FlightGroup - add() flight is null");
-        if (!origin.getCode().equals(flight.origin().getCode())) {
+        if (!flightOriginsMatch(flight)) {
             throw new IllegalArgumentException("Flights must originate from the same airport to be added");
         }
         return flights.computeIfAbsent(flight.departureTime(), flights -> new HashSet<>()).add(flight);
@@ -38,7 +38,7 @@ public final class FlightGroup {
     //Removes a flight if it is mapped to the collection of flights at its departure time
     public final boolean remove(Flight flight) {
         Objects.requireNonNull(flight,"FlightGroup - remove() flight is null");
-        if (!origin.getCode().equals(flight.origin().getCode())) {
+        if (!flightOriginsMatch(flight)) {
             throw new IllegalArgumentException("Flights must originate from the same airport to be removed");
         }
 
@@ -58,6 +58,11 @@ public final class FlightGroup {
 
     public Airport getOrigin() {
         return origin;
+    }
+
+    //Returns true if
+    public boolean flightOriginsMatch(Flight flight) {
+        return origin.getCode().equals(flight.origin().getCode());
     }
 
 }
