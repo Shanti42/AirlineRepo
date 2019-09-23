@@ -12,20 +12,25 @@ final class RouteState {
 
     private final NavigableSet<RouteNode> unreached;
 
-    private Airport origin;
-    private
-    private
 
     private RouteState(Set<Airport> airports, Airport origin, LocalTime departureTime){
-        unreached = new NavigableSet<RouteNode>() {
+        unreached = new TreeSet<>();
+        airportNode = new HashMap<>();
+        airportNode.put(origin, RouteNode.of(origin, new RouteTime(departureTime.plus(origin.getConnectionTimeMin())), null));
+        RouteNode tempNode;
+        for(Airport airport: airports){
+            tempNode = RouteNode.of(airport);
+            airportNode.put(airport, tempNode);
+            unreached.add(tempNode);
         }
-        airportNode = new
     }
 
     //replaces the route node for the corresponding airport, assumes airport is in the route state and is unreached
     final void replaceNode(RouteNode routeNode){
         Objects.requireNonNull(routeNode, "RouteState, replaceNode -> given route node is null");
-        unreached.ge
+        RouteNode prevNode = airportNode.replace(routeNode.getAirport(), routeNode);
+        unreached.remove(prevNode);
+        unreached.add(routeNode);
     }
 
     //returns true if all airports are reached
