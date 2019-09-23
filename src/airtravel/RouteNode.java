@@ -1,6 +1,7 @@
 package airtravel;
 
 import java.util.Objects;
+import java.util.Set;
 
 public final class RouteNode implements Comparable<RouteNode> {
 
@@ -14,7 +15,7 @@ public final class RouteNode implements Comparable<RouteNode> {
 
     public RouteTime getArrivalTime() { return arrivalTime; }
 
-    public final RouteNode getPrevious() { return previous; }'
+    public final RouteNode getPrevious() { return previous; }
 
     private RouteNode(Airport airport, RouteTime arrivalTime, RouteNode previous) {
         this.airport = airport;
@@ -30,16 +31,40 @@ public final class RouteNode implements Comparable<RouteNode> {
     }
 
     public static final RouteNode of(Flight flight, RouteNode previous) {
-        Objects.requireNonNull(flight);
+        Objects.requireNonNull(flight, "flight received null");
 
-        return new RouteNode(flight.destination(), plus(flight.arrivalTime()), previous);
+        return new RouteNode(flight.destination(), new RouteTime(flight.arrivalTime()), previous);
     }
 
     public static final RouteNode of(Airport airport) {
+        Objects.requireNonNull(airport,"received null airport");
+
+        return new RouteNode(airport, RouteTime.UNKNOWN,null);
 
     }
 
-    /**
-     *
-     */
+    public final Boolean isArrivalTimeKnown() {
+        return getArrivalTime().isKnown();
+    }
+
+    public final RouteTime departureTime() {
+        return getArrivalTime().plus(getAirport().getConnectionTimeMin());
+    }
+
+    public Set<Flight> availableFlights(FareClass fareClass) {
+        return airport.availableFlights(this.departureTime().getTime(), fareClass);
+    }
+
+    @Override
+    public int compareTo(RouteNode other) {
+        Objects.requireNonNull(other, "RouteNode, compareTo() -> Null parameter for other RouteNode");
+        if( this.getArrivalTime().compareTo(other.getArrivalTime()) == 0 ) {
+            return this.getAirport().compareTo(other.getAirport());
+        }
+        else {
+            return this.getArrivalTime().compareTo(other.getArrivalTime());
+        }
+
+    }
+
 }

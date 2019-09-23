@@ -47,9 +47,9 @@ final class RouteState {
     }
 
     final RouteNode closestUnreached(){
-        RouteNode smallestArivalTime = unreached.pollFirst();
-        if(smallestArivalTime != null){
-            return smallestArivalTime;
+        RouteNode smallestArrivalTime = unreached.pollFirst();
+        if(smallestArrivalTime != null) {
+            return smallestArrivalTime;
         } else {
             throw new NoSuchElementException("All Airports have been reached");
         }
