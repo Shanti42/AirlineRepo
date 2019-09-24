@@ -11,11 +11,17 @@ public final class RouteNode implements Comparable<RouteNode> {
     //Null previous denotes that this node is the original departure airport
     private final RouteNode previous;
 
-    public Airport getAirport() { return airport; }
+    public Airport getAirport() {
+        return airport;
+    }
 
-    public RouteTime getArrivalTime() { return arrivalTime; }
+    public RouteTime getArrivalTime() {
+        return arrivalTime;
+    }
 
-    public final RouteNode getPrevious() { return previous; }
+    public final RouteNode getPrevious() {
+        return previous;
+    }
 
     private RouteNode(Airport airport, RouteTime arrivalTime, RouteNode previous) {
         this.airport = airport;
@@ -37,9 +43,9 @@ public final class RouteNode implements Comparable<RouteNode> {
     }
 
     public static final RouteNode of(Airport airport) {
-        Objects.requireNonNull(airport,"received null airport");
+        Objects.requireNonNull(airport, "received null airport");
 
-        return new RouteNode(airport, RouteTime.UNKNOWN,null);
+        return new RouteNode(airport, RouteTime.UNKNOWN, null);
 
     }
 
@@ -58,10 +64,9 @@ public final class RouteNode implements Comparable<RouteNode> {
     @Override
     public int compareTo(RouteNode other) {
         Objects.requireNonNull(other, "RouteNode, compareTo() -> Null parameter for other RouteNode");
-        if( this.getArrivalTime().compareTo(other.getArrivalTime()) == 0 ) {
+        if (this.getArrivalTime().compareTo(other.getArrivalTime()) == 0) {
             return this.getAirport().compareTo(other.getAirport());
-        }
-        else {
+        } else {
             return this.getArrivalTime().compareTo(other.getArrivalTime());
         }
 
