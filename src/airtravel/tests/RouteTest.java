@@ -180,11 +180,9 @@ public class RouteTest  {
         FareClass fareClass = FareClass.of(4, BUSINESS);
 
         Set<Flight> flightSet = routeNode.getAirport().availableFlights(depart1,fareClass);
-        System.out.println(flightSet.isEmpty());
-        System.out.println(flightSet.toString());
-        //flights = routeNode.availableFlights(fareClass);
-        //System.out.println(flights.isEmpty());
-        //System.out.println(flights.toString());
+        //System.out.println(flightSet.isEmpty());
+        //System.out.println(flightSet.toString());
+        assertTrue(flightSet.size() == 2);
 
     }
 
