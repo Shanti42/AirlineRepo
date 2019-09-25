@@ -11,7 +11,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RouteTest  {
@@ -24,13 +26,14 @@ public class RouteTest  {
 
     public RouteTime routeTime1;
     public RouteTime routeTime2;
+    public RouteTime routeTime3;
 
     public Leg leg;
     public FlightSchedule flightSchedule;
     public SeatConfiguration seatConfig;
     public Flight flight;
 
-    public Set<Airport> airports;
+    public Set<Airport> airports = new HashSet<>();
 
     @BeforeAll
     void initializeRoutes() {
@@ -41,6 +44,7 @@ public class RouteTest  {
 
         routeTime1 = new RouteTime(LocalTime.of(6,0));
         routeTime2 = new RouteTime(LocalTime.of(5,0));
+        routeTime3 = new RouteTime(LocalTime.of(3,0));
 
         leg = Leg.of(airport1, Airport.of("LGA", Duration.ofHours(6)));
         flightSchedule = FlightSchedule.of(LocalTime.MIN,LocalTime.NOON);
@@ -99,6 +103,7 @@ public class RouteTest  {
         RouteNode routeNode = RouteNode.of(airport1, routeTime1, null);
         FareClass fareClass = FareClass.of(4, BUSINESS);
         Set<Flight> flights = routeNode.availableFlights(fareClass);
+        assertNotNull(flights);
 
     }
 
@@ -106,29 +111,11 @@ public class RouteTest  {
     void testRouteNodeCompareTo() {
         RouteNode routeNode1  = RouteNode.of(airport1, routeTime1, null);
         RouteNode routeNode2 = RouteNode.of(airport2, routeTime2, routeNode1);
-        RouteNode routeNode3 = RouteNode.of(airport3, routeTime1, routeNode2);
+        RouteNode routeNode3 = RouteNode.of(airport4, routeTime1, routeNode2);
 
         assertTrue(routeNode1.compareTo(routeNode1) == 0); //Compare RouteTime 6 to 6
-        assertTrue(routeNode1.compareTo(routeNode2) >= 0);
-        assertTrue(routeNode1.compareTo(routeNode3) <= 0);
-
-    }
-
-    /**
-     * Test RouteState
-     */
-    @Test
-    void testRouteStateOf() {
-
-    }
-
-    @Test
-    void testRouteStateReplaceNode() {
-
-    }
-
-    @Test
-    void testRouteStateClosestUnreached() {
+        assertTrue(routeNode1.compareTo(routeNode2) > 0); //Compare RouteTime 6 to 5
+        assertTrue(routeNode1.compareTo(routeNode3) < 0); //Compare CLE to LGA
 
     }
 
@@ -138,7 +125,17 @@ public class RouteTest  {
 
     @Test
     void testRouteFinderRoute() {
+        RouteNode routeNode1 = RouteNode.of(airport1, routeTime1, null);
+        RouteNode routeNode2 = RouteNode.of(airport2, routeTime2, routeNode1);
+        RouteNode routeNode3 = RouteNode.of(airport3, routeTime3, routeNode2);
+        RouteNode routeNode4 = RouteNode.of(airport4, routeTime1, routeNode3);
 
+        LocalTime departureTime =
+        FareClass fareClass = FareClass.of(7,BUSINESS);
+        assertTrue(routeTime1.isKnown());
+        RouteFinder routeFinder = RouteFinder.of(airports);
+        RouteNode routeFound = routeFinder.route(airport1, airport4, routeTime2.getTime(), fareClass);
+        assertTrue(routeFound.compareTo(routeNode4) == 0);
     }
 
 }

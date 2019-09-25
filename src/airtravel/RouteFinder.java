@@ -1,6 +1,7 @@
 package airtravel;
 
 import java.time.LocalTime;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -12,6 +13,12 @@ public final class RouteFinder {
 
     private RouteFinder(Set<Airport> airports) {
         this.airports = airports;
+    }
+
+    public static final RouteFinder of(Set<Airport> airports) {
+        Objects.requireNonNull(airports, "Received null Set of Airports");
+
+        return new RouteFinder(airports);
     }
 
     /**
