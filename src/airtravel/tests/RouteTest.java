@@ -27,6 +27,7 @@ public class RouteTest  {
     public RouteTime routeTime1;
     public RouteTime routeTime2;
     public RouteTime routeTime3;
+    public RouteTime routeUnknown;
 
     public Leg leg;
     public FlightSchedule flightSchedule;
@@ -45,6 +46,7 @@ public class RouteTest  {
         routeTime1 = new RouteTime(LocalTime.of(6,0));
         routeTime2 = new RouteTime(LocalTime.of(5,0));
         routeTime3 = new RouteTime(LocalTime.of(3,0));
+        routeUnknown = new RouteTime(null);
 
         leg = Leg.of(airport1, Airport.of("LGA", Duration.ofHours(6)));
         flightSchedule = FlightSchedule.of(LocalTime.MIN,LocalTime.NOON);
@@ -59,6 +61,56 @@ public class RouteTest  {
         airports.add(airport1);
         airports.add(airport4);
     }
+
+    /**
+     * RouteTime Tests
+     */
+    @Test
+    void testRouteTimeIsKnown() {
+        RouteTime routeKnown = new RouteTime(LocalTime.NOON);
+
+        assertFalse(routeUnknown.isKnown());
+        assertTrue(routeKnown.isKnown());
+    }
+
+    @Test
+    void testRouteTimeGetTime() {
+        RouteTime routeOfFive = new RouteTime(LocalTime.of(5,0));
+
+        assertThrows(IllegalStateException.class, () -> routeUnknown.getTime());
+        assertNotNull(routeOfFive.getTime());
+        assertEquals(LocalTime.of(5,0),routeOfFive.getTime());
+    }
+
+    @Test
+    void testRouteTimePlus() {
+        RouteTime routeOfFive = new RouteTime(LocalTime.of(5,0));
+
+        Duration durationOne = Duration.ofHours(1);
+        Duration durationThree = Duration.ofHours(3);
+        Duration durationTen = Duration.ofHours(10);
+
+        RouteTime routeOfSix = new RouteTime(LocalTime.of(6,0));
+        RouteTime routeOfEight = new RouteTime(LocalTime.of(8,0));
+        RouteTime routeOfFifteen = new RouteTime(LocalTime.of(15,0));
+
+        assertEquals(RouteTime.UNKNOWN,routeUnknown.plus(durationOne));
+        assertNotNull(routeOfFive.plus(durationOne));
+        assertTrue(routeOfSix.compareTo(routeOfFive.plus(durationOne)) ==0);
+        assertTrue(routeOfEight.compareTo(routeOfFive.plus(durationThree)) ==0);
+        assertTrue(routeOfFifteen.compareTo(routeOfFive.plus(durationTen)) ==0);
+
+    }
+
+    @Test
+    void testRouteTimeCompareTo() {
+
+        assertTrue(routeTime1.compareTo(routeTime1) == 0); //Compare RouteTime 6 to 6
+        assertFalse(routeTime1.compareTo(routeTime2) == 0); //Compare RouteTime 6 to 6
+        assertTrue( routeTime1.compareTo(routeTime2) > 0); //Compare RouteTime 6 to 5
+        assertTrue(routeTime3.compareTo(routeTime1) < 0); //Compare RouteTime 3 to 6
+    }
+
     /**
      * RouteNode Tests
      */
@@ -103,7 +155,7 @@ public class RouteTest  {
         RouteNode routeNode = RouteNode.of(airport1, routeTime1, null);
         FareClass fareClass = FareClass.of(4, BUSINESS);
         Set<Flight> flights = routeNode.availableFlights(fareClass);
-        assertNotNull(flights);
+        System.out.println(flights.toString());
 
     }
 
@@ -119,9 +171,21 @@ public class RouteTest  {
 
     }
 
+    @Test
+    void testRouteNodeHandleUnknown() {
+
+        assertTrue(routeUnknown.compareTo(routeUnknown) == 0);
+        assertTrue(routeTime1.compareTo(routeUnknown) == 1);
+        assertTrue(routeUnknown.compareTo(routeTime3) == -1);
+    }
     /**
-     * RouteFinder
+     * RouteFinder Tests
      */
+    @Test
+    void testRouteFinderOf() {
+        assertThrows(NullPointerException.class, () -> RouteFinder.of(null));
+        assertNotNull(RouteFinder.of(airports));
+    }
 
     @Test
     void testRouteFinderRoute() {
@@ -130,7 +194,6 @@ public class RouteTest  {
         RouteNode routeNode3 = RouteNode.of(airport3, routeTime3, routeNode2);
         RouteNode routeNode4 = RouteNode.of(airport4, routeTime1, routeNode3);
 
-        LocalTime departureTime =
         FareClass fareClass = FareClass.of(7,BUSINESS);
         assertTrue(routeTime1.isKnown());
         RouteFinder routeFinder = RouteFinder.of(airports);
