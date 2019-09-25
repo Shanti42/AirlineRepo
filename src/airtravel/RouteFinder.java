@@ -35,7 +35,6 @@ public final class RouteFinder {
         RouteState routeState = RouteState.of(airports, origin, departureTime);
         Airport currentAirport;
         RouteNode tempRouteNode;
-        RouteNode currentAirportNode;
         RouteNode priorAirportNode = routeState.airportNode(origin);
         while (!routeState.allReached()) {
             currentAirport = routeState.closestUnreached().getAirport();
@@ -49,6 +48,7 @@ public final class RouteFinder {
                 }
             }
             priorAirportNode = routeState.airportNode(currentAirport);
+            routeState.updateAsVisited(currentAirport);
 
         }
         //no route found
