@@ -52,7 +52,7 @@ public final class FlightGroup {
     //Returns a set of all flights at or after the given departure time
     public final Set<Flight> flightsAtOrAfter(LocalTime departureTime) {
         Objects.requireNonNull(departureTime, "FlightGroup - flightsAtOrAfter() departureTime is null");
-        return (Set) flights.tailMap(departureTime).values().stream().collect(Collectors.toSet());
+        return flights.tailMap(departureTime).values().stream().flatMap(Collection::stream).collect(Collectors.toSet());
 
     }
 

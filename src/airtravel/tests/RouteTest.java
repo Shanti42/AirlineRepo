@@ -13,6 +13,7 @@ import java.time.LocalTime;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -152,10 +153,38 @@ public class RouteTest  {
     @Test
     void testRouteNodeAvailableFlights() {
 
-        RouteNode routeNode = RouteNode.of(airport1, routeTime1, null);
+        Airport origin = Airport.of("CLE",Duration.ofHours(3));
+        Airport dest1 = Airport.of("LGA",Duration.ofHours(5));
+        Airport dest2 = Airport.of("LAX",Duration.ofHours(2));
+
+        Leg leg1 = Leg.of(origin,dest1);
+        Leg leg2 = Leg.of(origin, dest2);
+
+        LocalTime depart1 = LocalTime.of(5,0);
+        LocalTime depart2 = LocalTime.of(6,0);
+        LocalTime arrive1 = LocalTime.of(7,0);
+        LocalTime arrive2 = LocalTime.of(8,0);
+        FlightSchedule schedule1 = FlightSchedule.of(depart1,arrive1);
+        FlightSchedule schedule2 = FlightSchedule.of(depart2,arrive2);
+
+        SeatConfiguration seatConfig = SeatConfiguration.of(new EnumMap<SeatClass, Integer>(SeatClass.class));
+        seatConfig.setSeats(ECONOMY, 10);
+        seatConfig.setSeats(BUSINESS, 20);
+
+        Flight flight1 = SimpleFlight.of("A101",leg1,schedule1,seatConfig);
+        Flight flight2 = SimpleFlight.of("B101",leg2,schedule2,seatConfig);
+
+        origin.addFlight(flight1);
+        origin.addFlight(flight2);
+        RouteNode routeNode = RouteNode.of(origin, new RouteTime(arrive1), null);
         FareClass fareClass = FareClass.of(4, BUSINESS);
-        Set<Flight> flights = routeNode.availableFlights(fareClass);
-        System.out.println(flights.toString());
+
+        Set<Flight> flightSet = routeNode.getAirport().availableFlights(depart1,fareClass);
+        System.out.println(flightSet.isEmpty());
+        System.out.println(flightSet.toString());
+        //flights = routeNode.availableFlights(fareClass);
+        //System.out.println(flights.isEmpty());
+        //System.out.println(flights.toString());
 
     }
 
@@ -197,7 +226,7 @@ public class RouteTest  {
         FareClass fareClass = FareClass.of(7,BUSINESS);
         assertTrue(routeTime1.isKnown());
         RouteFinder routeFinder = RouteFinder.of(airports);
-        RouteNode routeFound = routeFinder.route(airport1, airport4, routeTime2.getTime(), fareClass);
+        RouteNode routeFound = routeFinder.route(airport1, airport4, LocalTime.of(6,0), fareClass);
         assertTrue(routeFound.compareTo(routeNode4) == 0);
     }
 
