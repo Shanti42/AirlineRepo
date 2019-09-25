@@ -2,16 +2,21 @@ package airtravel.tests;
 
 import airtravel.Airport;
 
+import airtravel.Flight;
 import airtravel.Leg;
 
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import static airtravel.tests.AirportCodes.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class AirTravelTest {
+class AirTravelTest extends FlightTest{
 
 
     Duration hour1 = Duration.ofHours(1);
@@ -62,6 +67,20 @@ class AirTravelTest {
         assertTrue(a1.compareTo(a3) == 0, "Test equal to");
     }
 
+    @Test
+    void testAvailableFlights() {
+        Set<Flight> testSet = new LinkedHashSet<Flight>();
+        testSet.add(flight);
+        testSet.add(flight1);
+        testSet.add(flight2);
+        testSet.add(flight3);
+        testSet.add(flight4);
+        //assertEquals(origin.availableFlights(LocalTime.MIN, econFareClass), testSet);
+
+        origin.availableFlights(LocalTime.MIN, econFareClass);
+
+    }
+
     /**
      * Test methods in Leg class
      */
@@ -84,6 +103,7 @@ class AirTravelTest {
 
 
     }
+
 
 
 

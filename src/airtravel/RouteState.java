@@ -55,6 +55,12 @@ final class RouteState {
         }
     }
 
+    //Removes the airport from the unvisted list, assumes it is in the list
+    final void updateAsVisited(Airport airport){
+        Objects.requireNonNull(airport, "RouteState, updateAsReached -> airport is null");
+        unreached.remove(airportNode(airport));
+    }
+
     //returns the route node corresponding to the airport, assumes the airport is in the route state
     final RouteNode airportNode(Airport airport){
         Objects.requireNonNull(airport, "RouteState, airportNode -> airport is null");
