@@ -27,6 +27,10 @@ public class FlightPolicyTest extends FlightTest {
 
     @Test
     void testFlightPolicySeatsAvailable() {
+        blankPolicy = blankPolicy();
+        FlightPolicy blankFlight = FlightPolicy.of(flight, blankPolicy);
+        assertTrue(seatConfigSame(seatConfig, blankFlight.seatsAvailable(busnFareClass)));
+        assertFalse(seatConfigSame(config1, blankFlight.seatsAvailable(busnFareClass)));
 
     }
 
