@@ -2,6 +2,7 @@ package airtravel;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -78,10 +79,27 @@ public final class Airport implements Comparable<Airport> {
      */
     public Set<Flight> availableFlights (LocalTime departureTime, FareClass fareclass){
         Objects.requireNonNull(fareclass,"Airport availableFlights() - null FareClass");
+//
+//        Set<Flight> flightsAfter = outFlights.flightsAtOrAfter(departureTime);
+//        return flightsAfter.stream()
+//                .filter(fl -> fl.hasSeats(fareclass))
+//                .collect(Collectors.toSet());
+//        Set<Flight> availableFlights = new HashSet<>();
+//        flightsAfter.forEach(flight -> if(flight.hasSeats()));
+//        for(Flight flight : flightsAfter){
+//            if(flight.hasSeats(fareclass)){
+//                availableFlights.add(flight);
+//            }
+//            //else, do nothing, flight is not available
+//        }
+//        return availableFlights;
 
-        Set<Flight> flightsAfter = outFlights.flightsAtOrAfter(departureTime);
-        return flightsAfter.stream()
-                .filter(flight -> flight.hasSeats(fareclass))
+        return outFlights.flightsAtOrAfter(departureTime).stream()
+                .filter(fl -> fl.hasSeats(fareclass))
                 .collect(Collectors.toSet());
+    }
+
+    Set<Flight> availableFlightsFromRoute(RouteNode routeNode, FareClass fareclass){
+        return availableFlights(routeNode.departureTime().getTime(), fareclass);
     }
 }

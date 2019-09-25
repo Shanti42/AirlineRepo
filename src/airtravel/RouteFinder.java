@@ -35,16 +35,16 @@ public final class RouteFinder {
             if (currentAirport.equals(destination)) {
                 return routeState.airportNode(currentAirport);
             }
-            for (Flight flight : currentAirport.availableFlights(routeState.airportNode(currentAirport).departureTime().getTime(), fareClass)) {
+            for (Flight flight : currentAirport.availableFlightsFromRoute(routeState.airportNode(currentAirport), fareClass)) {
                 tempRouteNode = routeState.airportNode(flight.destination());
                 if (flight.arrivalTime().compareTo(tempRouteNode.getArrivalTime().getTime()) > 1) {
                     routeState.replaceNode(RouteNode.of(flight, priorAirportNode));
                 }
             }
             priorAirportNode = routeState.airportNode(currentAirport);
-            //make sure to imncrement current departure time for each iteration
 
         }
+        //no route found
         return null;
     }
 }
