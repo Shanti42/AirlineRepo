@@ -36,6 +36,13 @@ public final class RouteTime implements Comparable<RouteTime> {
         return isKnown() ? new RouteTime((LocalTime) duration.addTo(routeTime)) : UNKNOWN;
     }
 
+
+    static RouteTime of(LocalTime localTime){
+        //allow null localTime
+        return new RouteTime(localTime);
+    }
+
+
     @Override
     public int compareTo(RouteTime other) {
         Objects.requireNonNull(other, "RouteTime, compareTo() -> Null parameter for other RouteTime");
