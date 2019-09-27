@@ -39,6 +39,8 @@ public final class RouteNode implements Comparable<RouteNode> {
 
     public static final RouteNode of(Flight flight, RouteNode previous) {
         Objects.requireNonNull(flight, "flight received null");
+        Objects.requireNonNull(previous, "previous node received is null");
+        assert (flight.getLeg().getOrigin().equals(previous.airport));
 
         return new RouteNode(flight.destination(), new RouteTime(flight.arrivalTime()), previous);
     }
@@ -60,6 +62,7 @@ public final class RouteNode implements Comparable<RouteNode> {
 
     public Set<Flight> availableFlights(FareClass fareClass) {
         Objects.requireNonNull(fareClass, "RouteNode, availableFlights() -> Null parameter for fareClass");
+        assert (arrivalTime.isKnown());
         return airport.availableFlights(this.departureTime().getTime(), fareClass);
     }
 
