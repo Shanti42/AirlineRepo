@@ -46,6 +46,7 @@ final class RouteState {
         unreached.remove(prevNode);
         unreached.add(routeNode);
     }
+
     //returns true if all airports are reached
     final boolean allReached(){
         return unreached.isEmpty();

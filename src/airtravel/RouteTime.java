@@ -39,7 +39,7 @@ public final class RouteTime implements Comparable<RouteTime> {
     }
 
 
-    static RouteTime of(LocalTime localTime){
+    static RouteTime of(LocalTime localTime) {
         //allow null localTime
         return new RouteTime(localTime);
     }
@@ -49,18 +49,9 @@ public final class RouteTime implements Comparable<RouteTime> {
     public int compareTo(RouteTime other) {
         Objects.requireNonNull(other, "RouteTime, compareTo() -> Null parameter for other RouteTime");
         if (!this.isKnown() || !other.isKnown()) {
-            return handleUnknownRouteTimes(this, other);
+            return Boolean.compare(this.isKnown(), other.isKnown());
         } else {
             return routeTime.compareTo(other.getTime());
-        }
-    }
-
-
-    private int handleUnknownRouteTimes(RouteTime routeTime1, RouteTime routeTime2) {
-        if (!routeTime1.isKnown() && !routeTime2.isKnown()) {
-            return 0;
-        } else {
-            return routeTime1.isKnown() ? 1 : -1;
         }
     }
 

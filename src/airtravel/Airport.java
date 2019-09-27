@@ -73,16 +73,17 @@ public final class Airport implements Comparable<Airport> {
 
     /**
      * Finds flights that leave at or after the departure time that have seats for the fare class
+     *
      * @param departureTime the time flights must leave at or after
-     * @param fareclass the fare class seats are checked for
+     * @param fareclass     the fare class seats are checked for
      * @return A set of flights that leave at or after the departure time that have seats for the fare class
      */
-    public Set<Flight> availableFlights (LocalTime departureTime, FareClass fareclass){
-        Objects.requireNonNull(departureTime,"Airport availableFlights() - null departureTime");
-        Objects.requireNonNull(fareclass,"Airport availableFlights() - null FareClass");
+    public Set<Flight> availableFlights(LocalTime departureTime, FareClass fareclass) {
+        Objects.requireNonNull(departureTime, "Airport availableFlights() - null departureTime");
+        Objects.requireNonNull(fareclass, "Airport availableFlights() - null FareClass");
 
         return outFlights.flightsAtOrAfter(departureTime).stream()
-               .filter(fl -> fl.hasSeats(fareclass))
+                .filter(fl -> fl.hasSeats(fareclass))
                 .collect(Collectors.<Flight>toSet());
     }
 }
