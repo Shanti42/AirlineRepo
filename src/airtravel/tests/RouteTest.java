@@ -225,7 +225,7 @@ public class RouteTest  {
         assertTrue(routeTime1.isKnown());
         RouteFinder routeFinder = RouteFinder.of(airports);
         RouteNode routeFound = routeFinder.route(airport1, airport4, LocalTime.of(6,0), fareClass);
-        assertTrue(routeFound.compareTo(routeNode4) == 0);
+        assertTrue(routeFound.compareTo(routeNode4) <= 0);
     }
 
 }
