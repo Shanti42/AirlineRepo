@@ -5,6 +5,8 @@ import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Set;
 
+import static airtravel.RouteTime.UNKNOWN;
+
 /**
  * Re-routes passengers from an airport to a final destination
  */
@@ -33,27 +35,32 @@ public final class RouteFinder {
      * @return
      */
     public final RouteNode route(Airport origin, Airport destination, LocalTime departureTime, FareClass fareClass) {
+        //check for null values
+        Objects.requireNonNull(origin, "RouteFinder, route() -> origin null");
+        Objects.requireNonNull(destination, "RouteFinder, route() -> destination null");
+        Objects.requireNonNull(departureTime, "RouteFinder route() -> departureTime null");
+        Objects.requireNonNull(fareClass, "RouteFinder route() -> fareClass null");
+
         RouteState routeState = RouteState.of(airports, origin, departureTime);
-        Airport currentAirport;
-        RouteNode priorAirportNode = routeState.airportNode(origin);
-        RouteTime bestTime = new RouteTime(null);
+
+        RouteNode currentAirportNode;
+
         while (!routeState.allReached()) {
-            currentAirport = routeState.closestUnreached().getAirport();
-            if (currentAirport.equals(destination)) {
-                return routeState.airportNode(currentAirport);
+            currentAirportNode = routeState.closestUnreached();
+            if (currentAirportNode.equals(destination)) {
+                return currentAirportNode;
             }
-            priorAirportNode.departureTime().getTime();
-            for (Flight flight : currentAirport.availableFlights(priorAirportNode.departureTime().getTime(), fareClass)) {
-                if (RouteTime.of(flight.arrivalTime()).compareTo(bestTime) < 0) {
-                    routeState.replaceNode(RouteNode.of(flight, priorAirportNode));
-                    bestTime = RouteTime.of(flight.arrivalTime());
+            for (Flight flight : currentAirportNode.availableFlights(fareClass)) {
+                RouteTime destinationArrivalTime = routeState.airportNode(flight.destination()).getArrivalTime();
+
+                if (RouteTime.of(flight.arrivalTime()).compareTo(destinationArrivalTime) < 0) {
+                    routeState.replaceNode(RouteNode.of(flight, currentAirportNode));
                 }
             }
-            priorAirportNode = routeState.airportNode(currentAirport);
-            //removes the current airport from the unreached list.
-            routeState.updateAsVisited(currentAirport);
         }
         //no route found
         return null;
     }
+
+
 }

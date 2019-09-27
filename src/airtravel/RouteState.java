@@ -16,16 +16,19 @@ final class RouteState {
     private RouteState(Set<Airport> airports, Airport origin, LocalTime departureTime){
         unreached = new TreeSet<>();
         airportNode = new HashMap<>();
-
-        airportNode.put(origin, RouteNode.of(origin, new RouteTime(departureTime), null));
-        RouteNode tempNode;
+        addToList(origin, RouteNode.of(origin, new RouteTime(departureTime), null));
         for(Airport airport: airports){
             if(!airport.equals(origin)) {
-                tempNode = RouteNode.of(airport);
-                airportNode.put(airport, tempNode);
-                unreached.add(tempNode);
+                addToList(airport, RouteNode.of(airport));
             }
         }
+    }
+
+    private void addToList(Airport airport, RouteNode routeNode) {
+        Objects.requireNonNull(airport, "Airport null");
+        Objects.requireNonNull(routeNode, "RouteNode null");
+        airportNode.put(airport, routeNode);
+        unreached.add(routeNode);
     }
 
     //build method
@@ -43,7 +46,6 @@ final class RouteState {
         unreached.remove(prevNode);
         unreached.add(routeNode);
     }
-
     //returns true if all airports are reached
     final boolean allReached(){
         return unreached.isEmpty();
@@ -56,12 +58,6 @@ final class RouteState {
         } else {
             throw new NoSuchElementException("All Airports have been reached");
         }
-    }
-
-    //Removes the airport from the unvisted list, assumes it is in the list
-    final void updateAsVisited(Airport airport){
-        Objects.requireNonNull(airport, "RouteState, updateAsReached -> airport is null");
-        unreached.remove(airportNode(airport));
     }
 
     //returns the route node corresponding to the airport, assumes the airport is in the route state
