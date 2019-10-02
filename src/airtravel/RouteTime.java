@@ -35,7 +35,7 @@ public final class RouteTime implements Comparable<RouteTime> {
     public RouteTime plus(Duration duration) {
         Objects.requireNonNull(duration, "RouteTime, plus() -> Null duration parameter");
 
-        return isKnown() ? new RouteTime((LocalTime) duration.addTo(routeTime)) : UNKNOWN;
+        return isKnown() ? new RouteTime((LocalTime) routeTime.plus(duration)) : UNKNOWN;
     }
 
 
