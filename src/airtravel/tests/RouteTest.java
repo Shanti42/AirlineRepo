@@ -194,17 +194,10 @@ public class RouteTest  {
 
         assertTrue(routeNode1.compareTo(routeNode1) == 0); //Compare RouteTime 6 to 6
         assertTrue(routeNode1.compareTo(routeNode2) > 0); //Compare RouteTime 6 to 5
-        assertTrue(routeNode1.compareTo(routeNode3) < 0); //Compare CLE to LGA
+        assertTrue(routeNode1.compareTo(routeNode3) < 0); //RouteTimes are the same so compares 'CLE' to 'LGA'
 
     }
 
-    @Test
-    void testRouteNodeHandleUnknown() {
-
-        assertTrue(routeUnknown.compareTo(routeUnknown) == 0);
-        assertTrue(routeTime1.compareTo(routeUnknown) == 1);
-        assertTrue(routeUnknown.compareTo(routeTime3) == -1);
-    }
     /**
      * RouteFinder Tests
      */
@@ -216,16 +209,52 @@ public class RouteTest  {
 
     @Test
     void testRouteFinderRoute() {
-        RouteNode routeNode1 = RouteNode.of(airport1, routeTime1, null);
-        RouteNode routeNode2 = RouteNode.of(airport2, routeTime2, routeNode1);
-        RouteNode routeNode3 = RouteNode.of(airport3, routeTime3, routeNode2);
-        RouteNode routeNode4 = RouteNode.of(airport4, routeTime1, routeNode3);
+        //Connected Graph
+        Airport origin = Airport.of("CLE", Duration.ofHours(1));
+        Airport destLGA = Airport.of("LGA", Duration.ofHours(1));
+        Airport destLAX = Airport.of("LAX", Duration.ofHours(1));
+        Airport destMIA = Airport.of("MIA", Duration.ofHours(1));
 
-        FareClass fareClass = FareClass.of(7,BUSINESS);
-        assertTrue(routeTime1.isKnown());
+        //Legs of flight from CLE to NY to LA
+        Leg leg1 = Leg.of(origin, destLGA);
+        Leg leg2 = Leg.of(destLGA, destLAX);
+
+        //Legs of flight from CLE to Miami to LA
+        Leg leg3 = Leg.of(origin, destMIA);
+        Leg leg4 = Leg.of(destMIA, destLAX);
+
+        //Flight Schedule for CLE to NY to LA
+        FlightSchedule schedule1 = FlightSchedule.of(LocalTime.of(2,0), LocalTime.of(3,0)); //1 Hour Flight
+        FlightSchedule schedule2 = FlightSchedule.of(LocalTime.of(5,0), LocalTime.of(8,0)); //3 Hours Flight
+
+        //Flight Schedule for CLE to Miami to LA
+        FlightSchedule schedule3 = FlightSchedule.of(LocalTime.of(2,0), LocalTime.of(4, 0)); //2 Hour Flight
+        FlightSchedule schedule4 = FlightSchedule.of(LocalTime.of(5,0), LocalTime.of(8,0)); //3 Hour Flight
+
+        SeatConfiguration seatConfig = SeatConfiguration.of(new EnumMap<SeatClass, Integer>(SeatClass.class));
+        seatConfig.setSeats(ECONOMY, 19);
+        FareClass fareClass = FareClass.of(4, ECONOMY);
+
+        Flight flight1 = SimpleFlight.of("A101", leg1, schedule1, seatConfig);
+        Flight flight2 = SimpleFlight.of("B101", leg2, schedule2, seatConfig);
+        Flight flight3 = SimpleFlight.of("A102", leg3, schedule3, seatConfig);
+        Flight flight4 = SimpleFlight.of("C101", leg4, schedule4, seatConfig);
+
+        origin.addFlight(flight1);
+        origin.addFlight(flight3);
+
+        destLGA.addFlight(flight2);
+        destMIA.addFlight(flight4);
+
+        Set<Airport> airports = new HashSet<>();
+        airports.add(origin);
+        airports.add(destLAX);
+        airports.add(destLGA);
+        airports.add(destMIA);
+
         RouteFinder routeFinder = RouteFinder.of(airports);
-        RouteNode routeFound = routeFinder.route(airport1, airport4, LocalTime.of(6,0), fareClass);
-        assertTrue(routeFound.compareTo(routeNode4) <= 0);
+        assertEquals(destMIA.getCode(), routeFinder.route(origin, destMIA, LocalTime.of(2,0), fareClass));
+
     }
 
 }

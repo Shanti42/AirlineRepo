@@ -28,25 +28,16 @@ public final class FlightGroup {
 
     //Adds a flight to the collection mapped to its departure time
     public final boolean add(Flight flight) {
-        Objects.requireNonNull(flight, "FlightGroup - add() flight is null");
-        if (!flightOriginsMatch(flight)) {
-            throw new IllegalArgumentException("Flights must originate from the same airport to be added");
-        }
+        validateFlightOrigin(flight, "add() - Flights must originate from the same airport to be added");
+
         return flights.computeIfAbsent(flight.departureTime(), flights -> new HashSet<>()).add(flight);
     }
 
     //Removes a flight if it is mapped to the collection of flights at its departure time
     public final boolean remove(Flight flight) {
-        Objects.requireNonNull(flight,"FlightGroup - remove() flight is null");
-        if (!flightOriginsMatch(flight)) {
-            throw new IllegalArgumentException("Flights must originate from the same airport to be removed");
-        }
+        validateFlightOrigin(flight, "remove() - Flights must originate from the same airport to be removed");
 
-        try {
-            return flights.computeIfPresent(flight.departureTime(), (key, oldVal) -> oldVal).remove(flight);
-        } catch(NullPointerException e){
-            return false;
-        }
+        return flights.computeIfPresent(flight.departureTime(), (key, oldVal) -> oldVal).remove(flight);
     }
 
     //Returns a set of all flights at or after the given departure time
@@ -60,9 +51,12 @@ public final class FlightGroup {
         return origin;
     }
 
-    //Returns true if
-    public boolean flightOriginsMatch(Flight flight) {
-        return origin.getCode().equals(flight.origin().getCode());
+    //Throws if flight airport does not have the same origin airport as the FlightGroup
+    public void validateFlightOrigin(Flight flight, String errorMsg) {
+        Objects.requireNonNull(flight, "validateFlightOrigin() - Flight is null");
+        if (!origin.getCode().equals(flight.origin().getCode())) {
+            throw new IllegalArgumentException((errorMsg));
+        }
     }
 
 }
