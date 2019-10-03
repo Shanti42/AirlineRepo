@@ -60,9 +60,10 @@ public final class RouteNode implements Comparable<RouteNode> {
         return getArrivalTime().plus(getAirport().getConnectionTimeMin());
     }
 
+    //Assumes arrival time is known as per instructions
     public Set<Flight> availableFlights(FareClass fareClass) {
-        Objects.requireNonNull(fareClass, "RouteNode, availableFlights() -> Null parameter for fareClass");
         assert (arrivalTime.isKnown());
+        Objects.requireNonNull(fareClass, "RouteNode, availableFlights() -> Null parameter for fareClass");
         return airport.availableFlights(this.departureTime().getTime(), fareClass);
     }
 
