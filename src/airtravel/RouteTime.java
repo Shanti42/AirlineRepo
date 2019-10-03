@@ -42,7 +42,7 @@ public final class RouteTime implements Comparable<RouteTime> {
     public int compareTo(RouteTime other) {
         Objects.requireNonNull(other, "RouteTime, compareTo() -> Null parameter for other RouteTime");
         if (!this.isKnown() || !other.isKnown()) {
-            return Boolean.compare(this.isKnown(), other.isKnown());
+            return Boolean.compare(!this.isKnown(), !other.isKnown());
         } else {
             return routeTime.compareTo(other.getTime());
         }

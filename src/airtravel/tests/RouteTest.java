@@ -113,6 +113,9 @@ public class RouteTest  {
         assertFalse(routeTime1.compareTo(routeTime2) == 0); //Compare RouteTime 6 to 6
         assertTrue( routeTime1.compareTo(routeTime2) > 0); //Compare RouteTime 6 to 5
         assertTrue(routeTime3.compareTo(routeTime1) < 0); //Compare RouteTime 3 to 6
+        assertTrue(routeTime1.compareTo(new RouteTime(null)) <0 ); //Compare RouteTime with route time with null value
+
+
     }
 
     /**
