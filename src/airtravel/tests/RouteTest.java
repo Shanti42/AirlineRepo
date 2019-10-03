@@ -236,8 +236,8 @@ public class RouteTest  {
         //Connected Graph
         Airport origin = Airport.of("CLE", Duration.ofHours(1));
         Airport destLGA = Airport.of("LGA", Duration.ofHours(1));
-        Airport destLAX = Airport.of("LAX", Duration.ofHours(1));
         Airport destMIA = Airport.of("MIA", Duration.ofHours(1));
+        Airport destLAX = Airport.of("LAX", Duration.ofHours(1));
 
         //Legs of flight from CLE to NY to LA
         Leg leg1 = Leg.of(origin, destLGA);
@@ -248,7 +248,7 @@ public class RouteTest  {
         Leg leg4 = Leg.of(destMIA, destLAX);
 
         //Flight Schedule for CLE to NY to LA
-        FlightSchedule schedule1 = FlightSchedule.of(LocalTime.of(2,0), LocalTime.of(3,0)); //1 Hour Flight
+        FlightSchedule schedule1 = FlightSchedule.of(LocalTime.of(3,0), LocalTime.of(4,0)); //1 Hour Flight
         FlightSchedule schedule2 = FlightSchedule.of(LocalTime.of(5,0), LocalTime.of(8,0)); //3 Hours Flight
 
         //Flight Schedule for CLE to Miami to LA
@@ -272,12 +272,16 @@ public class RouteTest  {
 
         Set<Airport> airports = new HashSet<>();
         airports.add(origin);
-        airports.add(destLAX);
         airports.add(destLGA);
         airports.add(destMIA);
+        airports.add(destLAX);
 
         RouteFinder routeFinder = RouteFinder.of(airports);
-        assertEquals(destMIA.getCode(), routeFinder.route(origin, destMIA, LocalTime.of(2,0), fareClass));
+
+        //Departure Time = FlightSchedule departTime + origin airports connectionTimeMin
+        // I.e. Minimum Departure Time is 2:00 + 100 = 3:00
+        assertEquals(destLAX.getCode(), routeFinder.route(origin, destLAX, LocalTime.of(2,0), fareClass).getAirport().getCode());
+
     }
 
     /**
@@ -302,7 +306,7 @@ public class RouteTest  {
         FlightSchedule schedule1 = FlightSchedule.of(LocalTime.of(2,0), LocalTime.of(3,0)); //1 Hour Flight
         FlightSchedule schedule2 = FlightSchedule.of(LocalTime.of(5,0), LocalTime.of(8,0)); //3 Hours Flight
 
-        //Flight Schedule for CLE to Miami to LA
+        //Flight Schedule for CLE to Miami 
         FlightSchedule schedule3 = FlightSchedule.of(LocalTime.of(2,0), LocalTime.of(4, 0)); //2 Hour Flight
 
         SeatConfiguration seatConfig = SeatConfiguration.of(new EnumMap<SeatClass, Integer>(SeatClass.class));

@@ -30,7 +30,7 @@ public final class FlightGroup {
     public final boolean add(Flight flight) {
         validateFlightOrigin(flight, "add() - Flights must originate from the same airport to be added");
 
-        return flights.computeIfAbsent(flight.departureTime(), flights -> new HashSet<>()).add(flight);
+        return flights.computeIfAbsent(flight.departureTime(), fl -> new HashSet<Flight>()).add(flight);
     }
 
     //Removes a flight if it is mapped to the collection of flights at its departure time
