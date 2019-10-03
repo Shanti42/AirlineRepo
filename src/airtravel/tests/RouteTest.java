@@ -306,7 +306,7 @@ public class RouteTest  {
         FlightSchedule schedule1 = FlightSchedule.of(LocalTime.of(2,0), LocalTime.of(3,0)); //1 Hour Flight
         FlightSchedule schedule2 = FlightSchedule.of(LocalTime.of(5,0), LocalTime.of(8,0)); //3 Hours Flight
 
-        //Flight Schedule for CLE to Miami 
+        //Flight Schedule for CLE to Miami
         FlightSchedule schedule3 = FlightSchedule.of(LocalTime.of(2,0), LocalTime.of(4, 0)); //2 Hour Flight
 
         SeatConfiguration seatConfig = SeatConfiguration.of(new EnumMap<SeatClass, Integer>(SeatClass.class));
@@ -329,7 +329,7 @@ public class RouteTest  {
         airports.add(destMIA);
 
         RouteFinder routeFinder = RouteFinder.of(airports);
-        assertNull(routeFinder.route(origin, destMIA, LocalTime.of(2,0), fareClass));
+        assertNull(routeFinder.route(origin, destMIA, LocalTime.of(3,0), fareClass));
     }
 
 
