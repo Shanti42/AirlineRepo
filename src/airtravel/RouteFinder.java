@@ -62,7 +62,7 @@ public final class RouteFinder {
     private void findFastestConnectedFlight(RouteNode currentAirportNode, FareClass fareClass, RouteState routeState) {
         for (Flight flight : currentAirportNode.availableFlights(fareClass)) {
             RouteTime destinationArrivalTime = routeState.airportNode(flight.destination()).getArrivalTime();
-            if (RouteTime.of(flight.arrivalTime()).compareTo(destinationArrivalTime) < 0) {
+            if (new RouteTime(flight.arrivalTime()).compareTo(destinationArrivalTime) < 0) {
                 routeState.replaceNode(RouteNode.of(flight, currentAirportNode));
             }
         }

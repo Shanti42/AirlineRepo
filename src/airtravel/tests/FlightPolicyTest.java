@@ -11,11 +11,16 @@ import java.time.Duration;
 import java.util.EnumMap;
 import java.util.function.BiFunction;
 
+/**
+ * FlightPolicy class Tests
+ */
 public class FlightPolicyTest extends FlightTest {
 
     public BiFunction<SeatConfiguration, FareClass, SeatConfiguration> blankPolicy;
 
-
+    /**
+     * FlightPolicy build method test
+     */
     @Test
     void testFlightPolicyOf() {
         blankPolicy = blankPolicy();
@@ -25,6 +30,9 @@ public class FlightPolicyTest extends FlightTest {
 
     }
 
+    /**
+     * FlightPolicy seatsAvailable() method test
+     */
     @Test
     void testFlightPolicySeatsAvailable() {
         blankPolicy = blankPolicy();
@@ -34,6 +42,9 @@ public class FlightPolicyTest extends FlightTest {
 
     }
 
+    /**
+     * FlightPolicy strict() method test
+     */
     @Test
     void testFlightPolicyStrict() {
         blankPolicy = blankPolicy();
@@ -49,8 +60,11 @@ public class FlightPolicyTest extends FlightTest {
         assertTrue(seatConfigSame(onlyBis, strictFlight.seatsAvailable(busnFareClass)));
     }
 
+    /**
+     * FlightPolicy limited() method test
+     */
     @Test
-    void testLimitedFlightPolicy() {
+    void testFlightPolicyLimited() {
         blankPolicy = blankPolicy();
         FlightPolicy blankFlight = FlightPolicy.of(flight, blankPolicy);
         Flight limitedFlight1 = FlightPolicy.limited(blankFlight);
@@ -66,6 +80,9 @@ public class FlightPolicyTest extends FlightTest {
         assertTrue(seatConfigSame(econPremRem, limitedFlight1.seatsAvailable(busnFareClass)), "Test limited with highest class passenger");
     }
 
+    /**
+     * FlightPolicy restrictedDuration() method test
+     */
     @Test
     void testFlightPolicyRestrictedDuration() {
         blankPolicy = blankPolicy();
@@ -80,6 +97,9 @@ public class FlightPolicyTest extends FlightTest {
         assertFalse(seatConfigSame(seatConfig, restricted.seatsAvailable(econFareClass)));
     }
 
+    /**
+     * FlightPolicy reserve() method test
+     */
     @Test
     void testFlightPolicyReserve() {
         blankPolicy = blankPolicy();
@@ -92,6 +112,9 @@ public class FlightPolicyTest extends FlightTest {
 
     }
 
+    /**
+     * FlightPolicy - Test two newly created policies (as anonymous classes)
+     */
     @Test
     void testAdditionalPolicies() {
         /**
@@ -150,6 +173,9 @@ public class FlightPolicyTest extends FlightTest {
     }
 
 
+    /**
+     * FlightPolicy - test the composition of multiple policies
+     */
     @Test
     void testPolicyComposition() {
         blankPolicy = blankPolicy();
@@ -164,6 +190,9 @@ public class FlightPolicyTest extends FlightTest {
 
     }
 
+    /**
+     * Helper Routine - Creates a policy with no restrictions
+     */
     protected BiFunction<SeatConfiguration, FareClass, SeatConfiguration> blankPolicy() {
         BiFunction<SeatConfiguration, FareClass, SeatConfiguration> blankPolicy = (seatConfig, fareClass) -> {
             return SeatConfiguration.clone(seatConfig);

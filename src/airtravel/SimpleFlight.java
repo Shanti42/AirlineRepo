@@ -22,10 +22,10 @@ public final class SimpleFlight extends AbstractFlight {
     }
 
     public static final SimpleFlight of(String code, Leg leg, FlightSchedule flightSchedule, SeatConfiguration seatsAvailable) {
-        Objects.requireNonNull(code, "SimpleFlight - build() Received null code parameter");
-        Objects.requireNonNull(leg, "SimpleFlight - build() Received null leg parameter");
-        Objects.requireNonNull(flightSchedule, "SimpleFlight - build() Received null flight Schedule parameter");
-        Objects.requireNonNull(seatsAvailable, "SimpleFlight - build() Received null seats available parameter");
+        Objects.requireNonNull(code, "SimpleFlight - of() Received null code parameter");
+        Objects.requireNonNull(leg, "SimpleFlight - of() Received null leg parameter");
+        Objects.requireNonNull(flightSchedule, "SimpleFlight - of() Received null flight Schedule parameter");
+        Objects.requireNonNull(seatsAvailable, "SimpleFlight - of() Received null seats available parameter");
         SimpleFlight newFlight = new SimpleFlight(code, leg, flightSchedule, seatsAvailable);
         leg.getOrigin().addFlight(newFlight);
         return newFlight;

@@ -38,10 +38,10 @@ public final class SeatConfiguration {
     public final int seats(SeatClass seatClass) {
         Objects.requireNonNull(seatClass, "SeatConfiguration - seats() Received null Seat Class parameter");
         Integer seatCount = seats.get(seatClass);
-        if (seatCount != null && seatCount >= 0) {
-            return seatCount;
-        } else {
+        if(seatCount == null || seatCount < 0) {
             return 0;
+        } else {
+            return seatCount;
         }
     }
 

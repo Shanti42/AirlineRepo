@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the Flight interface, and the AbstractFlight and SimpleFlight classes
+ * Tests FlightGroup and FlightSchedule classes
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FlightTest {
@@ -114,139 +115,10 @@ public class FlightTest {
         flight3 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config3);
         flight4 = SimpleFlight.of(CLE.toString(), leg, flightSchedule, config4);
     }
-    /**
-     *   SimpleFlight build method
-     */
-    @Test
-    void testSimpleFlightOf(){
-
-
-        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,null,null, null);});
-        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(originCode,null,null, seatConfig);});
-        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(originCode,null,null, null);});
-        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,leg,null,null);});
-        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,null,flightSchedule,null);});
-        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(originCode,leg,null,null);});
-        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(originCode, null,flightSchedule,null);});
-        Assertions.assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,leg,flightSchedule,null);});
-
-    }
-    /**
-     * SimpleFlight - Test if isShort() throws exception when expected and returns a boolean otherwise. Further testing is provided in FlightSchedule method
-     */
-    @Test
-    void testSimpleFlightIsShort() {
-        Duration nullDuration = null;
-
-        Assertions.assertThrows(NullPointerException.class, () -> {flight.isShort(nullDuration);});
-
-        Duration duration = Duration.ofHours(10);
-        Assertions.assertNotNull(flight.isShort(duration));
-    }
-
-    @Test
-    void testFlightGroupOf(){
-
-        FlightGroup flightGroup = FlightGroup.of(origin);
-        Assertions.assertThrows(NullPointerException.class, () -> {FlightGroup.of(null);});
-    }
-
-    @Test
-    void testFlightGroupAdd(){
-
-        Flight nullFlight = null;
-        //Flight intentionally created with wrong origin for testing purposes
-        Flight badOriginFlight = SimpleFlight.of("Code", Leg.of(Airport.of("JFK",Duration.ofHours(3)),destination),flightSchedule,config1);
-
-        FlightGroup flightGroup = FlightGroup.of(origin);
-
-        assertThrows(NullPointerException.class, () -> {flightGroup.add(nullFlight);});
-        assertThrows(IllegalArgumentException.class, () -> {flightGroup.add(badOriginFlight);});
-        Assertions.assertTrue(flightGroup.add(flight));
-        Assertions.assertFalse(flightGroup.add(flight));
-
-    }
-
-    @Test
-    void testFlightGroupRemove() {
-
-        Flight nullFlight = null;
-        //Flight intentionally created with wrong origin for testing purposes
-        Flight badOriginFlight = SimpleFlight.of("Code", Leg.of(Airport.of("JFK",Duration.ofHours(3)),destination),flightSchedule,config1);
-
-        FlightGroup flightGroup = FlightGroup.of(origin);
-
-        assertThrows(NullPointerException.class, () -> {flightGroup.add(nullFlight);});
-        assertThrows(IllegalArgumentException.class, () -> {flightGroup.add(badOriginFlight);});
-        Assertions.assertFalse(flightGroup.remove(flight));
-        flightGroup.add(flight);
-        Assertions.assertTrue(flightGroup.remove(flight));
-        assertFalse(flightGroup.remove(flight));
-
-    }
-
-    @Test
-    void testFlightGroupFlightsAtOrAfter() {
-
-        FlightGroup flightGroup = FlightGroup.of(Airport.of("LGA",Duration.ofHours(1)));
-
-        Assertions.assertNotNull(flightGroup.flightsAtOrAfter(depart));
-        Assertions.assertEquals(new HashSet<>(), flightGroup.flightsAtOrAfter(LocalTime.MIDNIGHT));
-    }
-
-    @Test
-    void testSimpleFlightSeatsAvailable() {
-
-        assertThrows(NullPointerException.class, () -> {
-            flight.seatsAvailable(null);
-        }, "check catches null fare class");
-        assertTrue(seatConfigSame(flight1.seatsAvailable(econFareClass), config1), "Check returns proper SeatConfiguration");
-    }
-
-
-    @Test
-    void testSimpleAndAbstractFlightHasSeats(){
-        assertThrows(NullPointerException.class, () -> {
-            flight.hasSeats(null);
-        }, "check catches null fare class");
-        assertTrue(flight1.hasSeats(econFareClass), "Test there are seats for fare class");
-        assertTrue(flight1.hasSeats(premFareClass), "There are seats");
-        assertFalse(flight2.hasSeats(premFareClass), "Test no seats available");
-    }
 
     /**
-     * Test FlightSchedule class
+     * Helper routine Returns whether both SeatConfigurations are the same
      */
-    @Test
-    void testFlightScheduleOf() {
-        assertThrows(NullPointerException.class, () -> {
-            FlightSchedule.of(null, null);
-        });
-        assertThrows(NullPointerException.class, () -> {
-            FlightSchedule.of(depart, null);
-        });
-        assertThrows(NullPointerException.class, () -> {
-            FlightSchedule.of(null, arrival);
-        });
-    }
-
-    @Test
-    void testFlightScheduleIsShort() {
-        Duration oneHour = Duration.ofHours(1);
-        Duration twoHour = Duration.ofHours(2);
-        Duration mins30 = Duration.ofMinutes(30);
-        LocalTime oneHourLoc = LocalTime.of(1, 0);
-        LocalTime min30Loc = LocalTime.of(0, 30);
-        LocalTime twoHourLoc = LocalTime.of(2, 0);
-        FlightSchedule hourFlight = FlightSchedule.of(oneHourLoc, twoHourLoc);
-        assertThrows(NullPointerException.class, () -> {
-            hourFlight.isShort(null);
-        });
-        assertTrue(hourFlight.isShort(oneHour), "Duration equal to flight");
-        assertFalse(hourFlight.isShort(mins30), "Duration shorter than flight");
-        assertTrue(hourFlight.isShort(twoHour), "Duration longer than flight");
-    }
-
     boolean seatConfigSame(SeatConfiguration config1, SeatConfiguration config2){
         boolean isSame = true;
         No_Match:
@@ -258,12 +130,180 @@ public class FlightTest {
         }
         return isSame;
     }
+    /**
+     *      ---   AbstractFlights and SimpleFlight Tests ---
+     */
+    /**
+     *   SimpleFlight build method test - Tests exception handling for build method.
+     *   Tests SimpleFlight build method functionality
+     */
+    @Test
+    void testSimpleFlightOf(){
 
-    void printSeatConfig(SeatConfiguration seatConfig){
-        for(SeatClass seatClass: SeatClass.values()) {
-            System.out.println(seatConfig.seats(seatClass));
-        }
+        assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,null,null, null);});
+        assertThrows(NullPointerException.class, () -> {SimpleFlight.of(originCode,null,null, seatConfig);});
+        assertThrows(NullPointerException.class, () -> {SimpleFlight.of(originCode,null,null, null);});
+        assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,leg,null,null);});
+        assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,null,flightSchedule,null);});
+        assertThrows(NullPointerException.class, () -> {SimpleFlight.of(originCode,leg,null,null);});
+        assertThrows(NullPointerException.class, () -> {SimpleFlight.of(originCode, null,flightSchedule,null);});
+        assertThrows(NullPointerException.class, () -> {SimpleFlight.of(null,leg,flightSchedule,null);});
+
+        assertNotNull(SimpleFlight.of(originCode, leg, flightSchedule, seatConfig));
+
     }
 
+    /**
+     * AbstractFlight isShort() method test - Tests exception handling and functionality
+     * Further testing is provided in FlightSchedule isShort() test
+     */
+    @Test
+    void testAbstractFlightIsShort() {
+        Duration nullDuration = null;
+        Duration duration = Duration.ofHours(10);
+
+        assertThrows(NullPointerException.class, () -> {flight.isShort(nullDuration);});
+        assertNotNull(flight.isShort(duration));
+    }
+
+    /**
+     * AbstractFlight hasSeats() method test - Tests exception handling and functionality
+     * Further testing is provided is SeatConfiguration hasSeat() test
+     */
+    @Test
+    void testAbstractFlightHasSeats() {
+
+        assertThrows(NullPointerException.class, () -> {flight.hasSeats(null);});
+        assertNotNull((flight.hasSeats(premFareClass)));
+    }
+
+    /**
+     *      --- FlightGroup Tests ---
+     */
+
+    /**
+     * FlightGroup build method test - Tests exception handling for build method.
+     * Tests FlightGroup build method functionality
+     */
+    @Test
+    void testFlightGroupOf(){
+
+        FlightGroup flightGroup = FlightGroup.of(origin);
+        Assertions.assertThrows(NullPointerException.class, () -> {FlightGroup.of(null);});
+        assertNotNull(FlightGroup.of(origin));
+    }
+
+    /**
+     * FlightGroup add() method
+     */
+    @Test
+    void testFlightGroupAdd(){
+
+        Flight nullFlight = null;
+        //Flight intentionally created with wrong origin for testing purposes
+        Flight badOriginFlight = SimpleFlight.of("Code", Leg.of(Airport.of("JFK",Duration.ofHours(3)),destination),flightSchedule,config1);
+
+        FlightGroup flightGroup = FlightGroup.of(origin);
+
+        assertThrows(NullPointerException.class, () -> {flightGroup.add(nullFlight);});
+        assertThrows(IllegalArgumentException.class, () -> {flightGroup.add(badOriginFlight);});
+
+        assertTrue(flightGroup.add(flight));
+
+        Set<Flight> flights = new HashSet<>();
+        flights.add(flight);
+        assertEquals(flights, flightGroup.flightsAtOrAfter(flight.departureTime()));
+
+        assertFalse(flightGroup.add(flight));
+
+    }
+
+    /**
+     * FlightGroup remove() method
+     */
+    @Test
+    void testFlightGroupRemove() {
+
+        Flight nullFlight = null;
+        //Flight intentionally created with wrong origin for testing purposes
+        Flight badOriginFlight = SimpleFlight.of("Code", Leg.of(Airport.of("JFK",Duration.ofHours(3)),destination),flightSchedule,config1);
+
+        FlightGroup flightGroup = FlightGroup.of(origin);
+
+        assertThrows(NullPointerException.class, () -> {flightGroup.add(nullFlight);});
+        assertThrows(IllegalArgumentException.class, () -> {flightGroup.add(badOriginFlight);});
+
+        flightGroup.add(flight);
+        flightGroup.add(flight1);
+
+        assertTrue(flightGroup.remove(flight));
+        assertFalse(flightGroup.remove(flight));
+
+        Set<Flight> flights = new HashSet<>();
+        flights.add(flight1);
+
+        assertEquals(flights, flightGroup.flightsAtOrAfter(flight1.departureTime()));
+
+    }
+
+    /**
+     * FlightGroup flightsAtOrAfter() test
+     */
+    @Test
+    void testFlightGroupFlightsAtOrAfter() {
+
+        FlightGroup flightGroup = FlightGroup.of(Airport.of("CLE",Duration.ofHours(1)));
+
+        flightGroup.add(flight);
+        flightGroup.add(flight1);
+        flightGroup.add(flight2);
+        assertNotNull(flightGroup.flightsAtOrAfter(flight.departureTime()));
+
+        Set<Flight> flights = new HashSet<>();
+        flights.add(flight);
+        flights.add(flight1);
+        flights.add(flight2);
+        assertEquals(flights, flightGroup.flightsAtOrAfter(flight.departureTime()));
+
+        assertEquals(new HashSet<>(), flightGroup.flightsAtOrAfter(LocalTime.of(20,0)));
+    }
+
+    /**
+     *      ---- FlightSchedule tests ---
+     */
+    /**
+     * FlightSchedule build method test
+     */
+    @Test
+    void testFlightScheduleOf() {
+
+        assertThrows(NullPointerException.class, () -> { FlightSchedule.of(null, null); });
+        assertThrows(NullPointerException.class, () -> { FlightSchedule.of(depart, null); });
+        assertThrows(NullPointerException.class, () -> { FlightSchedule.of(null, arrival); });
+
+        assertNotNull(FlightSchedule.of(depart, arrival));
+    }
+
+    /**
+     * FlightSchedule isShort() test
+     */
+    @Test
+    void testFlightScheduleIsShort() {
+
+        Duration oneHour = Duration.ofHours(1);
+        Duration twoHour = Duration.ofHours(2);
+        Duration min30 = Duration.ofMinutes(30);
+
+        LocalTime oneHourLoc = LocalTime.of(1, 0);
+        LocalTime min30Loc = LocalTime.of(0, 30);
+        LocalTime twoHourLoc = LocalTime.of(2, 0);
+
+        FlightSchedule hourFlight = FlightSchedule.of(oneHourLoc, twoHourLoc);
+
+        assertThrows(NullPointerException.class, () -> { hourFlight.isShort(null); });
+        assertTrue(hourFlight.isShort(oneHour), "Duration equal to flight");
+        assertFalse(hourFlight.isShort(min30), "Duration shorter than flight");
+        assertTrue(hourFlight.isShort(twoHour), "Duration longer than flight");
+    }
 
 }

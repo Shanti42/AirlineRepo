@@ -16,95 +16,93 @@ import java.util.Set;
 import static airtravel.tests.AirportCodes.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test Airport and Leg classes
+ */
 class AirTravelTest extends FlightTest{
 
-
-    Duration hour1 = Duration.ofHours(1);
-    Duration hour2 = Duration.ofHours(2);
-    Duration hour3 = Duration.ofHours(3);
-
-    Object notAirport = new Object();
-    Airport a1 = Airport.of(CLE.name(), hour1);
-    Airport a2 = Airport.of(LAS.name(), hour2);
-    Airport a3 = Airport.of(CLE.name(), hour2);
-    Airport a4 = Airport.of(CLE.name(), hour1);
-    Airport a5 = Airport.of(GRE.name(), hour3);
-
-
     /**
-     * Test methods in Airport class
+     *  --- Airport Tests ---
      */
-
+    /**
+     * Airport build method tests
+     */
     @Test
     void testAirportOf() {
+
         //test error handling for method
-        assertThrows(NullPointerException.class, () -> {
-            Airport.of(null, hour2);
-        });
-        assertThrows(NullPointerException.class, () -> {
-            Airport.of(CLE.name(), null);
-        });
-        assertThrows(NullPointerException.class, () -> {
-            Airport.of(null, null);
-        });
-        assertEquals(Airport.of(CLE.name(), hour1), a1, "Test build method creates valid object");
-    }
-
-
-    @Test
-    void testEquals() {
-        assertTrue(a1.equals(a4), "Test two equal airports");
-        assertFalse(a1.equals(notAirport), "Test method catches non-airport classes");
-        assertTrue(a1.equals(a3), "Test two equal airports");
-        assertFalse(a1.equals(null), "Test false on null object");
-    }
-
-
-    @Test
-    void testCompareTo() {
-        assertTrue(a1.compareTo(a2) < 0, "Test less than");
-        assertTrue(a2.compareTo(a5) > 0, "Test greater than");
-        assertTrue(a1.compareTo(a3) == 0, "Test equal to");
-    }
-
-    @Test
-    void testAvailableFlights() {
-        Set<Flight> testSet = new LinkedHashSet<Flight>();
-        testSet.add(flight);
-        testSet.add(flight1);
-        testSet.add(flight2);
-        testSet.add(flight3);
-        testSet.add(flight4);
-        //assertEquals(origin.availableFlights(LocalTime.MIN, econFareClass), testSet);
-
-        origin.availableFlights(LocalTime.MIN, econFareClass);
-
+        assertThrows(NullPointerException.class, () -> { Airport.of(null, Duration.ofHours(2)); });
+        assertThrows(NullPointerException.class, () -> { Airport.of(CLE.name(), null); });
+        assertThrows(NullPointerException.class, () -> { Airport.of(null, null); });
+        Airport airport = Airport.of("CLE", Duration.ofHours(1));
+        assertEquals(Airport.of(CLE.name(), Duration.ofHours(1)), airport, "Test build method creates valid object");
     }
 
     /**
-     * Test methods in Leg class
+     * Airport equals() method test
      */
-
-
     @Test
-    void testLegOf(){
-        assertThrows(NullPointerException.class, () -> {
-            Leg.of(null, a1);
-        });
-        assertThrows(NullPointerException.class, () -> {
-            Leg.of(a2, null);
-        });
-        assertThrows(NullPointerException.class, () -> {
-            Leg.of(null, null);
-        });
-        Leg leg1 = Leg.of(a1, a2);
-        assertTrue(leg1.getOrigin().equals(a1), "Test Origin added to Leg");
-        assertTrue(leg1.getDestination().equals(a2), "Test Destination added to Leg");
+    void testAirportEquals() {
 
+        Airport airport = Airport.of("CLE", Duration.ofHours(5));
+        Airport sameAirport = Airport.of("CLE", Duration.ofHours(5));
+        Airport differentAirport = Airport.of("LGA", Duration.ofHours(5));
+        Integer notAirport = new Integer(1);
 
+        assertTrue(airport.equals(sameAirport), "Test two equal airports");
+        assertFalse(airport.equals(differentAirport), "Test two non-equals airports");
+        assertFalse(airport.equals(notAirport), "Test with non airport object");
     }
 
+    /**
+     * Airport compareTo() method test
+     */
+    @Test
+    void testCompareTo() {
 
+        Airport airport = Airport.of("CLE", Duration.ofHours(5));
+        Airport sameAirport = Airport.of("CLE", Duration.ofHours(5));
+        Airport differentAirport = Airport.of("LGA", Duration.ofHours(5));
 
+        assertTrue(airport.compareTo(differentAirport) < 0, "Test less than");
+        assertTrue(differentAirport.compareTo(airport) > 0, "Test greater than");
+        assertTrue(airport.compareTo(sameAirport) == 0, "Test equal to");
+    }
+
+    /**
+     * Airport availableFlights() method test
+     */
+    @Test
+    void testAirportAvailableFlights() {
+        Set<Flight> flights = new HashSet<Flight>();
+        flights.add(flight);
+        flights.add(flight1);
+        flights.add(flight2);
+        flights.add(flight3);
+        flights.add(flight4);
+
+        assertEquals(flights.toString(), origin.availableFlights(LocalTime.MIN, econFareClass).toString());
+    }
+
+    /**
+     *      --- Leg Tests ---
+     */
+    /**
+     * Leg build method test
+     */
+    @Test
+    void testLegOf(){
+
+        Airport origin = Airport.of("CLE", Duration.ofHours(5));
+        Airport dest = Airport.of("LGA", Duration.ofHours(1));
+
+        assertThrows(NullPointerException.class, () -> { Leg.of(null, dest); });
+        assertThrows(NullPointerException.class, () -> { Leg.of(origin, null); });
+        assertThrows(NullPointerException.class, () -> { Leg.of(null, null); });
+
+        Leg leg1 = Leg.of(origin, dest);
+        assertTrue(leg1.getOrigin().equals(origin), "Test Origin added to Leg");
+        assertTrue(leg1.getDestination().equals(dest), "Test Destination added to Leg");
+    }
 
 }
