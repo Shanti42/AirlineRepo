@@ -43,9 +43,9 @@ public final class RouteFinder {
 
         RouteState routeState = RouteState.of(airports, origin, departureTime);
 
-        RouteNode currentAirportNode;
+        RouteNode currentAirportNode = routeState.airportNode(origin);
+        routeState.removeFromVisited(origin);
         while (!routeState.allReached()) {
-            currentAirportNode = routeState.closestUnreached();
             if (currentAirportNode.getAirport().equals(destination)) {
                 return currentAirportNode;
             } else if (currentAirportNode.availableFlights(fareClass).isEmpty()) {
@@ -53,6 +53,7 @@ public final class RouteFinder {
             } else {
                 findFastestConnectedFlight(currentAirportNode, fareClass, routeState);
             }
+            currentAirportNode = routeState.closestUnreached();
         }
         //no route found
         return null;
