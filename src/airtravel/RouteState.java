@@ -72,11 +72,4 @@ final class RouteState {
         return airportNode.get(airport);
     }
 
-    //removes the node of the given airport
-    void removeFromVisited(Airport airport) {
-        Objects.requireNonNull(airport, "RouteState, removeFromVisited -> airport is null");
-        assert (airportNode.containsKey(airport));
-        unreached.remove(airportNode.get(airport));
-    }
-
 }

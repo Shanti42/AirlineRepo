@@ -42,7 +42,6 @@ public final class RouteFinder {
         Objects.requireNonNull(fareClass, "RouteFinder route() -> fareClass null");
 
         RouteState routeState = RouteState.of(airports, origin, departureTime);
-
         while (!routeState.allReached()) {
             RouteNode currentAirportNode = routeState.closestUnreached();
             if (currentAirportNode.getAirport().equals(destination)) {
