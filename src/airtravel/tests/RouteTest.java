@@ -252,7 +252,7 @@ public class RouteTest  {
 
         //Flight Schedule for CLE to NY to LA
         FlightSchedule schedule1 = FlightSchedule.of(LocalTime.of(3,0), LocalTime.of(4,0)); //1 Hour Flight
-        FlightSchedule schedule2 = FlightSchedule.of(LocalTime.of(5,0), LocalTime.of(8,0)); //3 Hours Flight
+        FlightSchedule schedule2 = FlightSchedule.of(LocalTime.of(6,0), LocalTime.of(9,0)); //3 Hours Flight
 
         //Flight Schedule for CLE to Miami to LA
         FlightSchedule schedule3 = FlightSchedule.of(LocalTime.of(2,0), LocalTime.of(4, 0)); //2 Hour Flight
@@ -281,9 +281,12 @@ public class RouteTest  {
 
         RouteFinder routeFinder = RouteFinder.of(airports);
 
-        //Departure Time = FlightSchedule departTime + origin airports connectionTimeMin
-        // I.e. Minimum Departure Time is 2:00 + 100 = 3:00
+        assertEquals(destLAX.getCode(), routeFinder.route(origin, destLAX, LocalTime.of(1,0), fareClass).getAirport().getCode());
         assertEquals(destLAX.getCode(), routeFinder.route(origin, destLAX, LocalTime.of(2,0), fareClass).getAirport().getCode());
+        assertEquals(destLAX.getCode(), routeFinder.route(origin, destLAX, LocalTime.of(0,0), fareClass).getAirport().getCode());
+
+        //Should return null because departureTime is 1 minute later then the last available departureTime
+        assertNull(routeFinder.route(origin, destLAX, LocalTime.of(2,1), fareClass));
 
     }
 
@@ -332,7 +335,15 @@ public class RouteTest  {
         airports.add(destMIA);
 
         RouteFinder routeFinder = RouteFinder.of(airports);
-        assertNull(routeFinder.route(origin, destMIA, LocalTime.of(3,0), fareClass));
+
+        //No shortest path due to disconnected graph
+        assertNull(routeFinder.route(origin, destLAX, LocalTime.of(2,0), fareClass));
+        assertNull(routeFinder.route(origin, destLAX, LocalTime.of(1,0), fareClass));
+        assertNull(routeFinder.route(origin, destLAX, LocalTime.of(0,0), fareClass));
+
+        assertNull(routeFinder.route(origin, destMIA, LocalTime.of(2,0), fareClass));
+        assertEquals(destMIA.getCode(), routeFinder.route(origin, destMIA, LocalTime.of(1,0), fareClass).getAirport().getCode());
+        assertEquals(destMIA.getCode(), routeFinder.route(origin, destMIA, LocalTime.of(0,0), fareClass).getAirport().getCode());
     }
 
 
